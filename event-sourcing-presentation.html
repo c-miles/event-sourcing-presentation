@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From CRUD to Events: A Rails Developer's Journey</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/plugin/highlight/monokai.min.css">
+
+    <style>
+        /* Import Lato font */
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        /* ==========================================================================
+           DESIGN TOKENS - 2025 Best Practices
+           Based on: TED Talk Design, WCAG AA, Dark Theme Research
+           ========================================================================== */
+
+        :root {
+            /* ==================== COLORS ==================== */
+
+            /* Backgrounds - Not pure black for better readability */
+            --bg-primary: #1a1a1b;
+            --bg-elevated: #252b3b;
+            --bg-interactive: #2d3340;
+
+            /* Text - Not pure white for reduced eye strain */
+            --text-primary: #e8eaed;
+            --text-secondary: #b8c5d6;
+            --text-muted: #7d8799;
+
+            /* Semantic Colors - Desaturated 15-20% for dark backgrounds */
+            --color-blue: #5b9bd5;        /* Info - Good contrast (7.2:1) */
+            --color-cyan: #4db8c4;        /* Accent - Desaturated from #44bec7 */
+            --color-orange: #f0a05c;      /* Warning - Desaturated from #ed7d31 */
+            --color-green: #82c466;       /* Success - Desaturated from #70ad47 */
+            --color-red: #e5707d;         /* Error - Desaturated */
+
+            /* ==================== SPACING ==================== */
+
+            /* Four-value system for consistency */
+            --space-extra-tight: 0.3em;   /* Micro-spacing for compact layouts */
+            --space-tight: 0.5em;         /* Close relationships */
+            --space-normal: 0.8em;        /* Standard sections */
+            --space-loose: 1.2em;         /* Major breaks */
+
+            /* Specific use cases */
+            --space-list-top: 0.3em;      /* ul/ol top margin after h4 */
+        }
+
+        /* ==========================================================================
+           BASE REVEAL.JS OVERRIDES
+           ========================================================================== */
+
+        .reveal {
+            font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 36px;
+            font-weight: 300;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+
+        /* Typography - Reduced sizes, no 3D effects */
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4 {
+            font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            text-transform: none;
+            text-shadow: none; /* NO 3D effects */
+            line-height: 1.2;
+            letter-spacing: normal;
+            margin: 0 0 0.5em 0;
+        }
+
+        .reveal h1 { font-size: 1.92em; font-weight: 900; } /* Title slide: 69px */
+        .reveal h2 { font-size: 1.6em; font-weight: 700; } /* Slide titles: 58px (research optimal: 36-44pt) */
+        .reveal h3 { font-size: 1.1em; font-weight: 700; } /* Section headers: 40px */
+        .reveal h4 { font-size: 0.95em; font-weight: 600; margin: 0; } /* Sub-headers: 34px */
+
+        .reveal p {
+            font-size: 0.8em; /* Body text: 29px (research optimal: 24-32px) */
+            line-height: 1.6;
+            margin: 0.5em 0; /* Standardized margin */
+        }
+
+        .reveal li {
+            font-size: 0.8em; /* List text: 29px - matches body */
+            line-height: 1.6;
+            margin: 0.3em 0;
+        }
+
+        /* Semantic typography classes for consistency */
+        .key-message {
+            font-size: 0.95em; /* Emphasized text: 34px */
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .supporting-text {
+            font-size: 0.7em; /* Supporting details: 25px */
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .reveal strong {
+            font-weight: 700;
+        }
+
+        /* Professional color palette - Using design tokens */
+        .highlight-blue { color: var(--color-blue); font-weight: 600; }
+        .highlight-cyan { color: var(--color-cyan); font-weight: 600; }
+        .highlight-orange { color: var(--color-orange); font-weight: 600; }
+        .highlight-green { color: var(--color-green); font-weight: 600; }
+        .highlight-red { color: var(--color-red); font-weight: 600; }
+
+        /* Text utilities using design tokens */
+        .text-primary { color: var(--text-primary); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-muted { color: var(--text-muted); }
+
+        /* Slide layout - CRITICAL: No overflow */
+        .reveal .slides {
+            text-align: center;
+        }
+
+        .reveal .slides section {
+            height: 100%;
+            padding: 40px 20px 60px 20px; /* top right bottom left - more breathing room at bottom */
+            box-sizing: border-box;
+            overflow: hidden; /* NEVER auto */
+        }
+
+        .reveal .slides section > * {
+            margin: 0.4em auto;
+            max-width: 95%;
+        }
+
+        /* Code styling */
+        .reveal pre {
+            font-size: 0.5em; /* Increased for better readability */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            width: 95%;
+            margin: 0.5em auto;
+            max-height: 480px;
+            overflow: hidden; /* Never show scrollbars */
+        }
+
+        .reveal pre code {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            padding: 1.2em;
+            line-height: 1.4;
+            max-height: 480px;
+            overflow: hidden;
+        }
+
+        .reveal code {
+            font-family: 'JetBrains Mono', monospace;
+            color: #5b9bd5;
+            font-size: 0.9em;
+        }
+
+        /* Reset code font-size inside pre blocks - don't shrink it */
+        .reveal pre code {
+            font-size: 1em; /* Inherit from pre, don't apply 0.9em shrink */
+        }
+
+        /* Grid layouts */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5em;
+            align-items: start;
+            margin: 0.5em 0;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2em;
+        }
+
+        /* Boxes and containers */
+        .state-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1em;
+            margin: 0.8em 0;
+        }
+
+        .state-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 0.8em;
+            font-size: 0.65em; /* Container: 23px */
+        }
+
+        .state-box.events { border-color: var(--color-orange); }
+        .state-box.state { border-color: var(--color-green); }
+
+        .state-box h4 {
+            margin: 0 0 0.5em 0;
+            font-size: 1.1em; /* Relative to container */
+        }
+
+        .state-box pre {
+            font-size: 1em; /* KEEP - code unchanged */
+            margin: 0.5em 0;
+        }
+
+        .state-box p {
+            margin: 0.5em 0 0 0;
+            font-size: 0.9em; /* Relative to container */
+        }
+
+        /* Grid boxes for building blocks */
+        .grid-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 0.8em;
+            text-align: center;
+        }
+
+        .grid-box h4 {
+            margin: 0 0 0.3em 0;
+            font-size: 1em; /* Consistent with h4 hierarchy */
+        }
+
+        .grid-box p {
+            margin: 0.2em 0;
+            font-size: 0.8em; /* Consistent with body text */
+        }
+
+        .grid-box code {
+            font-size: 0.85em; /* Inline code slightly smaller */
+        }
+
+        /* Flow diagram */
+        .flow-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 1.5em 0;
+            font-size: 0.75em; /* 27px - consistent with supporting text */
+        }
+
+        .flow-step {
+            background: rgba(91, 155, 213, 0.2);
+            padding: 0.8em 1.2em;
+            border-radius: 8px;
+            border: 2px solid #5b9bd5;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .flow-step strong {
+            display: block;
+            font-size: 1.1em; /* Slightly larger for emphasis */
+            margin-bottom: 0.2em;
+        }
+
+        .flow-arrow {
+            font-size: 1.8em; /* Visual element, can be larger */
+            color: #5b9bd5;
+            margin: 0 0.4em;
+        }
+
+        /* Tables */
+        .reveal table {
+            font-size: 0.6em; /* 22px - small but readable for data */
+            margin: 0.8em auto;
+            border-collapse: collapse;
+        }
+
+        .reveal table th {
+            background: rgba(91, 155, 213, 0.3);
+            font-weight: 700;
+            padding: 0.6em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .reveal table td {
+            padding: 0.5em 0.6em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Lists */
+        .reveal ul,
+        .reveal ol {
+            font-size: 1em; /* Container inherits body size */
+            margin: 0.5em 0;
+        }
+
+        .reveal li {
+            margin: 0.4em 0;
+            line-height: 1.5;
+        }
+
+        /* Blockquotes */
+        .reveal blockquote {
+            font-size: 0.75em; /* 27px - readable for quotes */
+            font-style: italic;
+            border-left: 4px solid #5b9bd5;
+            padding-left: 1em;
+            margin: 1em auto;
+            width: 85%;
+            text-align: left;
+        }
+
+        .reveal blockquote footer {
+            margin-top: 0.5em;
+            font-size: 0.85em; /* Citation size */
+            color: #aaa;
+        }
+
+        /* Utility classes */
+        .small-text {
+            font-size: 0.7em; /* 25px - for captions */
+            opacity: 0.85;
+        }
+
+        .compact {
+            margin: 0.2em 0;
+        }
+
+        /* Remove progress bar for cleaner look */
+        .reveal .progress {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .reveal .progress span {
+            background: #5b9bd5;
+        }
+
+        /* Controls */
+        .reveal .controls {
+            color: #5b9bd5;
+        }
+
+        /* Slide number */
+        .reveal .slide-number {
+            color: #5b9bd5;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Fix fragment visibility for highlight classes */
+        .reveal .fragment.highlight-blue:not(.visible),
+        .reveal .fragment.highlight-red:not(.visible),
+        .reveal .fragment.highlight-orange:not(.visible),
+        .reveal .fragment.highlight-green:not(.visible),
+        .reveal .fragment.highlight-cyan:not(.visible) {
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        .reveal .fragment.highlight-blue.visible,
+        .reveal .fragment.highlight-red.visible,
+        .reveal .fragment.highlight-orange.visible,
+        .reveal .fragment.highlight-green.visible,
+        .reveal .fragment.highlight-cyan.visible {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* ==========================================================================
+           BEM COMPONENTS - Semantic, Reusable Patterns
+           ========================================================================== */
+
+        /* Pattern Component (for Event Notification, ECST, CQRS slides) */
+        .pattern {
+            margin: var(--space-normal) auto;
+            max-width: 900px;
+            text-align: left;
+        }
+
+        .pattern__description {
+            font-size: 0.95em;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .pattern__detail {
+            font-size: 0.8em;
+            line-height: 1.6;
+            margin-top: var(--space-tight);
+        }
+
+        .pattern__benefits,
+        .pattern__pitfalls,
+        .pattern__tradeoffs {
+            margin-top: var(--space-normal);
+        }
+
+        .pattern__benefits h4 {
+            color: var(--color-green);
+            margin: 0;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .pattern__pitfalls h4,
+        .pattern__tradeoffs h4 {
+            color: var(--color-orange);
+            margin: 0;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .pattern__list {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .pattern__list li {
+            margin: 0.3em 0;
+        }
+
+        /* Content Section Component (for Problem/Solution layouts) */
+        .content-section {
+            margin: var(--space-normal) auto;
+            max-width: 900px;
+            text-align: left;
+        }
+
+        .content-section__intro {
+            font-size: 0.95em;
+            font-weight: 600;
+            margin: var(--space-tight) 0;
+        }
+
+        .content-section__body {
+            margin-top: var(--space-normal);
+        }
+
+        .content-section--problem,
+        .content-section--solution {
+            margin-top: var(--space-tight);
+        }
+
+        .content-section--problem h4 {
+            color: var(--color-red);
+            margin: 0;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .content-section--solution h4 {
+            color: var(--color-green);
+            margin: 0;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .content-section__list {
+            margin: var(--space-list-top) 0 0 0;
+            line-height: 1.5;
+        }
+
+        .content-section__list li {
+            margin: 0.3em 0;
+        }
+
+        /* Pattern Label Component (for pattern comparison grid) */
+        .pattern-label {
+            margin: 0 0 var(--space-extra-tight) 0;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .pattern-label--event-notification { color: var(--color-blue); }
+        .pattern-label--ecst { color: var(--color-cyan); }
+        .pattern-label--event-sourcing { color: var(--color-orange); }
+        .pattern-label--cqrs { color: var(--color-green); }
+
+        /* ==========================================================================
+           UTILITY CLASSES
+           ========================================================================== */
+
+        /* Common slide content container */
+        .slide-content {
+            text-align: left;
+            max-width: 900px;
+            margin: var(--space-normal) auto;
+        }
+
+        /* Spacing utilities */
+        .mt-extra-tight { margin-top: var(--space-extra-tight); }
+        .mt-tight { margin-top: var(--space-tight); }
+        .mt-normal { margin-top: var(--space-normal); }
+        .mt-loose { margin-top: var(--space-loose); }
+        .mb-extra-tight { margin-bottom: var(--space-extra-tight); }
+        .mb-tight { margin-bottom: var(--space-tight); }
+        .mb-normal { margin-bottom: var(--space-normal); }
+
+        /* Compact text - for tightly-packed definitions */
+        .compact-text { margin: var(--space-extra-tight) 0; }
+        .compact-text-zero { margin: 0; }
+
+        /* Code block standardization - higher specificity to override reveal defaults */
+        .reveal pre.code-block--small {
+            font-size: 0.4em;  /* 14px - for dense slides with lots of content */
+        }
+
+        .reveal pre.code-block {
+            font-size: 0.55em;  /* 20px - standard readable size */
+        }
+
+        .reveal pre.code-block--large {
+            font-size: 0.65em;  /* 23px - for slides with extra room */
+        }
+
+        .reveal pre.code-block--full-width {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Ruby ASCII Animation - IRB Easter Egg Tribute */
+        .ruby-ascii {
+            margin: 0 auto;  /* No top margin - directly under title */
+            font-family: 'Courier New', 'Courier', monospace;  /* Classic terminal font */
+            font-size: 13px;
+            line-height: 13px;
+            color: #cc0000;  /* Bright ruby red */
+            text-align: center;
+            white-space: pre;
+            text-shadow: 0 0 10px rgba(204, 0, 0, 0.5);  /* Ruby red glow */
+            letter-spacing: -1px;  /* Negative spacing - tighter ASCII characters */
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- SECTION 1: HOOK (2-3 min) -->
+
+            <!-- Title Slide -->
+            <section data-transition="zoom">
+                <h1>From CRUD to Events</h1>
+                <h3>A Rails Developer's Journey into Event Sourcing</h3>
+                <div id="ruby-ascii" class="ruby-ascii"></div>
+                <aside class="notes">
+                    [0:00-0:30] Start with: "Hi, I'm Chris. Today I want to share my journey learning event sourcing - not as an expert teaching you, but as someone who's been figuring it out alongside you."
+                </aside>
+            </section>
+
+            <!-- The Problem: High-Stakes Hook -->
+            <section>
+                <h2>The Dispute</h2>
+                <div class="slide-content">
+                    <p class="fragment key-message">
+                        A customer disputes an <strong>$80</strong> charge for wireless headphones.
+                    </p>
+                    <p class="fragment" style="margin-top: 0.4em;">
+                        <strong>Customer:</strong> "I removed those headphones before checkout!"
+                    </p>
+                    <p class="fragment" style="margin-top: 0.4em;">
+                        <strong>Support:</strong> "Our records show they were in your completed order."
+                    </p>
+                    <p class="fragment" style="margin-top: 0.4em;">Customer support checks the database:</p>
+                    <pre class="fragment code-block--small" style="margin-top: 0.4em;"><code class="language-sql" data-trim>
+SELECT * FROM orders WHERE customer_id = 'cust_123' AND date = '2025-11-19';
+
+| order_id | status    | total   | items                    | updated_at          |
+|----------|-----------|---------|--------------------------|---------------------|
+| ord_456  | completed | $115.00 | laptop_case, headphones  | 2025-11-19 14:23:00 |
+                    </code></pre>
+                    <p class="fragment highlight-orange key-message" style="margin-top: 0.4em;">
+                        Database shows: $115 total with headphones. Customer says: "I only wanted the $35 laptop case!"
+                    </p>
+                    <p class="fragment highlight-red key-message" style="margin-top: 0.4em;">
+                        Who's telling the truth? You can't know. The history is gone.
+                    </p>
+                </div>
+                <aside class="notes">
+                    [0:30-1:30] HIGH-STAKES HOOK: Shopping cart dispute, conflicting stories, no way to resolve. Attention span is 8 seconds - grab them immediately with real stakes. Build tension - this is a problem they'll face eventually in e-commerce.
+                </aside>
+            </section>
+
+            <!-- Personal Context: Build Trust Early -->
+            <section>
+                <h2>Hi, I'm Chris Miles</h2>
+                <div class="slide-content">
+                    <p class="fragment key-message">
+                        <strong>Previously:</strong> 3.5 years at Orange Barrel Media
+                    </p>
+                    <p class="fragment supporting-text mt-tight" style="padding-left: 1.5em;">
+                        Building Rails apps right across the street from here
+                    </p>
+                    <p class="fragment key-message mt-normal">
+                        <strong>Three months ago:</strong> I joined Kode Health.
+                    </p>
+                    <p class="fragment key-message mt-normal">
+                        <strong>Day 1:</strong> "Everything here uses Event Sourcing."
+                    </p>
+                    <p class="fragment highlight-orange key-message mt-normal">
+                        I had no idea what that meant.
+                    </p>
+                    <p class="fragment key-message mt-normal">
+                        <strong>Today:</strong> I want to share what I've learned so far.
+                    </p>
+                    <p class="fragment key-message mt-normal">
+                        Not as an expert - but as someone still learning alongside you.
+                    </p>
+                    <p class="fragment key-message mt-normal">
+                        I've found that trying to teach something deepens my own understanding.
+                    </p>
+                </div>
+                <aside class="notes">
+                    [1:30-2:30] PERSONAL CONTEXT: Build local connection (OBM across street), establish Rails credibility (3.5 years), humanize (just learned ES 3 months ago). The "teach it to learn it" line frames the talk as a learning journey together.
+                </aside>
+            </section>
+
+            <!-- CRUD Limitations -->
+            <section>
+                <h2>The CRUD Reality</h2>
+                <pre class="code-block"><code class="language-ruby" data-trim>
+# Traditional Rails approach
+order.update!(status: 'shipped')
+
+# What we lost:
+# - Previous status? Gone.
+# - Who changed it? Maybe... if you added updated_by.
+# - When? Just updated_at.
+# - Why? No idea.
+                </code></pre>
+                <p class="fragment key-message mt-normal">
+                    We store <span class="highlight-orange">what it is NOW</span>,<br>
+                    not <span class="highlight-blue">HOW it got there</span>.
+                </p>
+                <aside class="notes">
+                    [1:15-2:00] Show the fundamental limitation of CRUD: we overwrite history with every update.
+                </aside>
+            </section>
+
+            <!-- The Insight: Two Things -->
+            <section data-auto-animate>
+                <h2>What If We Stored BOTH?</h2>
+                <div class="state-comparison">
+                    <div class="state-box events fragment">
+                        <h4 class="highlight-orange">The Events (Immutable Log)</h4>
+                        <pre class="code-block--large"><code class="language-text" data-trim>
+1. OrderCreated
+2. PaymentReceived
+3. OrderShipped
+4. OrderDelivered
+                        </code></pre>
+                        <p>What happened, in order</p>
+                    </div>
+                    <div class="state-box state fragment">
+                        <h4 class="highlight-green">Current State (Derived)</h4>
+                        <pre class="code-block--large"><code class="language-json" data-trim>
+{
+  "order_id": 12345,
+  "status": "delivered",
+  "total": 299.99
+}
+                        </code></pre>
+                        <p>Latest state, computed from events</p>
+                    </div>
+                </div>
+                <p class="fragment key-message mt-normal">
+                    Event Sourcing = Store the events + derive the state
+                </p>
+                <aside class="notes">
+                    [2:00-2:45] THE KEY INSIGHT from Fowler: We store BOTH the immutable event log AND the current application state. This is critical to understanding Event Sourcing.
+                </aside>
+            </section>
+
+            <!-- SECTION 2: MAIN IDEA (3-4 min) -->
+
+            <!-- Today's Roadmap -->
+            <section>
+                <h2>Today's Roadmap</h2>
+                <p>There are 4 event patterns that often get confused:</p>
+                <ol class="mt-tight">
+                    <li class="fragment"><strong class="highlight-blue">Event Notification</strong> <span class="small-text">(Simple pub/sub)</span></li>
+                    <li class="fragment"><strong class="highlight-cyan">Event-Carried State Transfer</strong> <span class="small-text">(Events contain full data)</span></li>
+                    <li class="fragment"><strong class="highlight-orange">Event Sourcing</strong> <span class="small-text">(Events as source of truth)</span></li>
+                    <li class="fragment"><strong class="highlight-green">CQRS</strong> <span class="small-text">(Separate read/write models)</span></li>
+                </ol>
+                <p class="fragment key-message mt-normal">
+                    We'll understand all 4, dive deep into Event Sourcing, then see how to implement in Rails.
+                </p>
+                <aside class="notes">
+                    [3:30-4:30] These patterns get confused. Set clear expectations: brief context on all 4, deep dive on ES, Rails implementation.
+                </aside>
+            </section>
+
+            <!-- SECTION 2: THE EVENT LANDSCAPE - Context Setting -->
+
+            <!-- Event Notification - Definition -->
+            <section>
+                <h2>Pattern #1: Event Notification</h2>
+                <div class="pattern">
+                    <p class="pattern__description fragment">
+                        Simple pub/sub: <span class="highlight-blue">"Something happened, you might care"</span>
+                    </p>
+                    <p class="pattern__detail fragment">
+                        Source system sends notification, doesn't expect response
+                    </p>
+                    <div class="pattern__benefits fragment">
+                        <h4>Benefits</h4>
+                        <ul class="pattern__list">
+                            <li>Low coupling between systems</li>
+                            <li>Simple to implement</li>
+                        </ul>
+                    </div>
+                    <div class="pattern__pitfalls fragment">
+                        <h4>Pitfall</h4>
+                        <ul class="pattern__list">
+                            <li>Logic flow becomes implicit and hard to trace</li>
+                            <li>Difficult debugging when processes span multiple events</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    [4:30-5:30] First of 4 patterns. Simplest form: "hey, this happened". Low coupling is good, but hidden workflows are bad.
+                </aside>
+            </section>
+
+            <!-- Event Notification - Example -->
+            <section>
+                <h2>Event Notification Example</h2>
+                <p>Order placed → multiple systems react independently</p>
+                <pre class="mt-tight code-block--large"><code class="language-ruby" data-trim data-line-numbers>
+# Publisher sends notification
+class OrderCreatedReactor
+  def call(event)
+    # Multiple independent actions
+    OrderMailer.confirmation(event.order_id).deliver_later
+    InventoryService.reserve(event.items)
+    AnalyticsService.track("order_created", event.data)
+  end
+end
+
+# Each subscriber handles the event independently
+# No coordination, no return values expected
+                </code></pre>
+                <p class="fragment key-message mt-tight">
+                    Perfect for <strong>loosely-coupled side effects</strong>
+                </p>
+                <aside class="notes">
+                    [5:30-6:00] Real Rails example. Each system reacts independently. No orchestration, just notifications.
+                </aside>
+            </section>
+
+            <!-- Event-Carried State Transfer - Definition -->
+            <section>
+                <h2>Pattern #2: Event-Carried State Transfer</h2>
+                <div class="pattern">
+                    <p class="pattern__description fragment">
+                        Events contain <span class="highlight-cyan">full state data</span> so consumers can maintain local copies
+                    </p>
+                    <p class="pattern__detail fragment">
+                        No back-queries to source system needed
+                    </p>
+                    <div class="pattern__benefits fragment">
+                        <h4>Benefits</h4>
+                        <ul class="pattern__list">
+                            <li>Greater resilience (no dependency on source)</li>
+                            <li>Reduced latency (local data)</li>
+                        </ul>
+                    </div>
+                    <div class="pattern__tradeoffs fragment">
+                        <h4>Trade-offs</h4>
+                        <ul class="pattern__list">
+                            <li>Data redundancy across services</li>
+                            <li>Complex receiver-side state management</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    [6:00-7:00] Second pattern: events are "fat" - contain everything. Trade redundancy for independence.
+                </aside>
+            </section>
+
+            <!-- Event-Carried State Transfer - Example -->
+            <section>
+                <h2>Event-Carried State Transfer Example</h2>
+                <p>Customer address change → event contains <strong>full</strong> customer data</p>
+                <pre class="mt-tight code-block"><code class="language-ruby" data-trim data-line-numbers>
+# Event contains ALL customer data
+Events::CustomerUpdated.new(
+  customer_id: 123,
+  name: "John Smith",
+  email: "john@example.com",
+  phone: "555-1234",
+  address: {
+    street: "123 Main St",
+    city: "Columbus",
+    state: "OH",
+    zip: "43215"
+  },
+  preferences: { newsletter: true }
+)
+
+# Consumer maintains local copy
+class CustomerReadModel
+  def update_from_event(event)
+    self.update!(event.data) # Full state refresh
+  end
+end
+                </code></pre>
+                <p class="fragment key-message mt-tight">
+                    Billing, Marketing, Analytics all have <span class="highlight-cyan">local customer copies</span>
+                </p>
+                <aside class="notes">
+                    [7:00-7:30] Fat events = resilience. Each service has its own copy, no queries back to customer service.
+                </aside>
+            </section>
+
+            <!-- CQRS - Definition -->
+            <section>
+                <h2>Pattern #3: CQRS</h2>
+                <p class="supporting-text">(Command Query Responsibility Segregation)</p>
+                <div class="pattern">
+                    <p class="pattern__description fragment">
+                        Separate <strong>data structures</strong> for reads vs writes
+                    </p>
+                    <div class="two-column fragment mt-normal">
+                        <div>
+                            <h4 class="highlight-blue">Write Model</h4>
+                            <ul class="pattern__list">
+                                <li>Optimized for business logic</li>
+                                <li>Validates rules</li>
+                                <li>Produces events</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="highlight-green">Read Model</h4>
+                            <ul class="pattern__list">
+                                <li>Optimized for queries</li>
+                                <li>Denormalized views</li>
+                                <li>Fast lookups</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="pattern__detail fragment mt-normal">
+                        Often combined with ES, but <span class="highlight-orange">independent pattern</span>
+                    </p>
+                </div>
+                <aside class="notes">
+                    [7:30-8:30] Third pattern: separate models for reading vs writing. Not inherently event-based but often paired.
+                </aside>
+            </section>
+
+            <!-- CQRS - Example -->
+            <section>
+                <h2>CQRS Example</h2>
+                <p>Shopping cart with separate write/read concerns</p>
+                <pre class="mt-tight code-block"><code class="language-ruby" data-trim data-line-numbers>
+# Write Model - Business logic
+class AddItemToCartCommand
+  attribute :cart_id, String
+  attribute :product_id, String
+  attribute :quantity, Integer
+end
+
+class CartDecider
+  def decide(command)
+    return Failure("Invalid quantity") if command.quantity <= 0
+    Success(Events::ItemAdded.build(command.to_h))
+  end
+end
+
+# Read Model - Query optimization
+class CartReadModel < ApplicationRecord
+  has_many :line_items
+
+  def total
+    line_items.sum { |item| item.price * item.quantity }
+  end
+end
+                </code></pre>
+                <p class="fragment key-message mt-tight">
+                    <strong>Different models</strong> for different jobs
+                </p>
+                <aside class="notes">
+                    [8:30-9:00] Commands/Deciders handle writes. ReadModels handle queries. Separation of concerns.
+                </aside>
+            </section>
+
+            <!-- SECTION 3: EVENT SOURCING DEEP DIVE -->
+
+            <!-- Bank Account Analogy -->
+            <section>
+                <h2>You Already Know This Pattern</h2>
+                <div class="slide-content mt-normal">
+                    <h4 class="fragment">Your Bank Account</h4>
+                    <pre class="fragment mt-tight code-block--full-width"><code class="language-text" data-trim>
+Date         Transaction            Amount      Balance
+--------------------------------------------------------
+2025-11-01   Deposit               +$1,000     $1,000
+2025-11-05   ATM Withdrawal        -$200       $800
+2025-11-10   Transfer Out          -$300       $500
+                    </code></pre>
+                    <p class="fragment mt-normal">
+                        Your bank doesn't just store <code>balance = $500</code>
+                    </p>
+                    <p class="fragment key-message mt-tight">
+                        It stores every transaction, then computes the balance.
+                    </p>
+                    <p class="fragment key-message mt-normal">
+                        <strong>That's Event Sourcing.</strong>
+                    </p>
+                    <p class="fragment mt-tight">
+                        Since 1494, accountants have used <strong>double-entry bookkeeping</strong>: never erase ledger entries, only add corrections.
+                    </p>
+                    <p class="fragment highlight-green key-message mt-tight">
+                        This pattern has been battle-tested for <strong>500+ years</strong> in banking.
+                    </p>
+                </div>
+                <aside class="notes">
+                    [4:00-4:45] Familiar analogy - everyone understands bank statements. The 500-year history (double-entry bookkeeping from 1494) shows this isn't a new fad but a proven, timeless pattern. This makes ES feel less foreign and more credible.
+                </aside>
+            </section>
+
+            <!-- SECTION 3: CORE CONCEPTS (3-4 min) -->
+
+            <!-- Event Sourcing Definition -->
+            <section>
+                <h2>Event Sourcing Defined</h2>
+                <blockquote class="mt-normal">
+                    "Capture all changes to application state as a sequence of events. These event objects are stored in the same sequence they were applied, for the same lifetime as the application state itself."
+                    <footer class="mt-normal">— Martin Fowler</footer>
+                </blockquote>
+                <div class="fragment mt-loose">
+                    <p class="key-message">Translation:</p>
+                    <p class="mt-tight">Every change = one immutable event</p>
+                    <p class="mt-tight">Events = append-only log</p>
+                    <p class="mt-tight">State = computed from events</p>
+                </div>
+                <aside class="notes">
+                    [4:45-5:30] Formal definition from Fowler, then break it down into plain language.
+                </aside>
+            </section>
+
+            <!-- Five Building Blocks -->
+            <section>
+                <h2>Five Building Blocks</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8em; margin-top: 0.8em; font-size: 0.75em;">
+                    <div class="grid-box fragment" style="border-color: var(--color-blue);">
+                        <h4 class="highlight-blue">1. Command</h4>
+                        <p>User's intent to change the system</p>
+                        <p><code>AddItemToCart</code></p>
+                    </div>
+                    <div class="grid-box fragment" style="border-color: var(--color-cyan);">
+                        <h4 class="highlight-cyan">2. Command Handler</h4>
+                        <p>Validates business rules</p>
+                        <p class="small-text">Produces events if valid</p>
+                    </div>
+                    <div class="grid-box fragment" style="border-color: var(--color-orange);">
+                        <h4 class="highlight-orange">3. Event</h4>
+                        <p>Immutable fact (past tense)</p>
+                        <p><code>ItemAddedToCart</code></p>
+                    </div>
+                    <div class="grid-box fragment" style="border-color: var(--color-green);">
+                        <h4 class="highlight-green">4. Event Handler</h4>
+                        <p>Reacts to events</p>
+                        <p class="small-text">Updates read models, side effects</p>
+                    </div>
+                </div>
+                <div class="grid-box fragment mt-normal" style="border-color: var(--color-blue); font-size: 0.75em;">
+                    <h4 class="highlight-blue">5. Event Store</h4>
+                    <p>Append-only, immutable log of all events</p>
+                </div>
+                <aside class="notes">
+                    [5:30-6:30] The five core building blocks. Keep it simple and visual.
+                </aside>
+            </section>
+
+            <!-- The Flow -->
+            <section>
+                <h2>The Event Sourcing Flow</h2>
+                <div class="flow-diagram">
+                    <div class="flow-step fragment">
+                        <strong>Command</strong>
+                        <span class="small-text">Intent</span>
+                    </div>
+                    <div class="flow-arrow fragment">→</div>
+                    <div class="flow-step fragment">
+                        <strong>Handler</strong>
+                        <span class="small-text">Validate</span>
+                    </div>
+                    <div class="flow-arrow fragment">→</div>
+                    <div class="flow-step fragment">
+                        <strong>Event</strong>
+                        <span class="small-text">Fact</span>
+                    </div>
+                    <div class="flow-arrow fragment">→</div>
+                    <div class="flow-step fragment">
+                        <strong>Reaction</strong>
+                        <span class="small-text">Update</span>
+                    </div>
+                </div>
+                <p class="fragment mt-loose">
+                    User wants to do something → System validates → Event created → State updated
+                </p>
+                <aside class="notes">
+                    [7:15-7:45] Visual flow showing the complete cycle from command to reaction.
+                </aside>
+            </section>
+
+            <!-- Code Example: Shopping Cart Tracking -->
+            <section>
+                <h3>Code Example: Shopping Cart Tracking</h3>
+                <p class="supporting-text compact-text">All events stored forever, enabling time travel</p>
+                <pre class="mt-extra-tight code-block--large"><code class="language-ruby" data-trim data-line-numbers>
+# Events stored forever (immutable facts)
+Events::ItemAdded.new(product: "laptop_case", price: 35, at: "14:10:00")
+Events::ItemAdded.new(product: "headphones", price: 80, at: "14:12:00")
+Events::ItemRemoved.new(product: "headphones", at: "14:15:00")
+Events::ItemAdded.new(product: "headphones", price: 80, at: "14:20:00")
+Events::CheckoutCompleted.new(total: 115, at: "14:23:00")
+
+# Query state at ANY point in time
+cart.as_of(Time.parse("2025-11-19 14:16:00"))
+# => { items: ["laptop_case"] }  # Headphones WERE removed!
+
+cart.as_of(Time.parse("2025-11-19 14:21:00"))
+# => { items: ["laptop_case", "headphones"] }  # Then added back!
+                </code></pre>
+                <p class="fragment key-message mt-tight">
+                    Dispute resolved! Customer DID remove them, but accidentally re-added.
+                </p>
+                <aside class="notes">
+                    [7:15-8:15] SHOPPING CART EXAMPLE: Ties back to our opening hook! Show how Event Sourcing solves the dispute problem. Events show customer removed headphones at 2:15 PM, but then re-added at 2:20 PM (accidental click?). This is the power of temporal queries - we can recreate any moment in time and resolve disputes with evidence.
+                </aside>
+            </section>
+
+            <!-- Event Store & Streams - Foundation -->
+            <section>
+                <h2>The Event Store & Streams</h2>
+                <p class="supporting-text">Before we go further, let's understand where events live</p>
+
+                <div class="slide-content">
+                    <div class="fragment mt-extra-tight">
+                        <h4 class="highlight-blue">Event Store</h4>
+                        <p class="compact-text-zero">Append-only database that stores all events forever</p>
+                        <pre class="mt-extra-tight code-block--small"><code class="language-ruby" data-trim>
+EventStore.publish(event)  # Write
+EventStore.read_stream("cart-123")  # Read
+                        </code></pre>
+                    </div>
+
+                    <div class="fragment mt-extra-tight">
+                        <h4 class="highlight-green">Event Stream</h4>
+                        <p class="compact-text-zero">All events for one entity, ordered by time</p>
+                        <pre class="mt-extra-tight code-block--small"><code class="language-text" data-trim>
+Stream: "cart-123"
+  ├─ Events::ItemAdded      (t=14:10)
+  ├─ Events::ItemRemoved    (t=14:15)
+  └─ Events::CheckoutCompleted (t=14:23)
+                        </code></pre>
+                    </div>
+
+                    <p class="fragment key-message mt-extra-tight">
+                        One stream per entity. Query any stream at any time.
+                    </p>
+                </div>
+
+                <aside class="notes">
+                    [8:15-8:45] FOUNDATION: Explain Event Store and Streams before showing code that uses them. Event Store is append-only DB. Stream is logical grouping of events for one aggregate. This makes read_stream() make sense in later examples.
+                </aside>
+            </section>
+
+            <!-- SECTION 4: WHY & WHEN (3-4 min) -->
+
+            <!-- The Superpowers: Intro -->
+            <section>
+                <h2>Event Sourcing Superpowers</h2>
+                <p class="mt-normal">Why would you use Event Sourcing?</p>
+                <p class="fragment key-message mt-normal">
+                    Because it unlocks capabilities impossible with traditional CRUD.
+                </p>
+                <p class="fragment mt-normal">
+                    Let's look at four game-changing superpowers...
+                </p>
+                <aside class="notes">
+                    [9:30-9:45] Set up the "why" - these superpowers are the value proposition of Event Sourcing.
+                </aside>
+            </section>
+
+            <!-- Superpower #1: Time Travel -->
+            <section>
+                <h2>Superpower #1: Time Travel Queries</h2>
+                <div class="slide-content">
+                    <p class="fragment key-message">
+                        Remember our shopping cart dispute? <span class="highlight-orange">"What was in the cart at 2:16 PM?"</span>
+                    </p>
+                    <pre class="fragment mt-tight code-block"><code class="language-ruby" data-trim>
+# Query state at ANY point in time
+cart.as_of(Time.parse("2025-11-19 14:16:00"))
+# => { items: ["laptop_case"] }  # Headphones WERE removed!
+
+cart.as_of(Time.parse("2025-11-19 14:21:00"))
+# => { items: ["laptop_case", "headphones"] }  # Then added back!
+                    </code></pre>
+                    <p class="fragment key-message highlight-green mt-tight">
+                        Dispute resolved! The complete history is preserved forever.
+                    </p>
+                    <p class="fragment mt-tight">
+                        This is impossible with CRUD - you can't recreate deleted/overwritten data.
+                    </p>
+                </div>
+                <aside class="notes">
+                    [9:45-10:15] SUPERPOWER #1: Callback to opening hook. Show how temporal queries solve real problems. This creates the "aha!" moment.
+                </aside>
+            </section>
+
+            <!-- Superpower #2: Perfect Audit Trail -->
+            <section>
+                <h2>Superpower #2: Perfect Audit Trail</h2>
+                <div class="slide-content">
+                    <p class="fragment key-message">
+                        Every change is recorded: <strong>what, who, when, why</strong> — forever.
+                    </p>
+                    <pre class="fragment mt-tight code-block"><code class="language-ruby" data-trim>
+Events::PatientDataUpdated
+  user_id: "dr_smith_123"
+  field: "medication"
+  old_value: "None"
+  new_value: "Aspirin 81mg"
+  timestamp: "2025-11-19 14:22:00"
+  reason: "New prescription"
+                    </code></pre>
+                    <p class="fragment key-message highlight-green mt-tight">
+                        HIPAA compliance? ✓ SOC 2 audit? ✓ Forensic investigation? ✓
+                    </p>
+                    <p class="fragment mt-tight">
+                        The audit log isn't an afterthought — it's the source of truth.
+                    </p>
+                </div>
+                <aside class="notes">
+                    [10:15-10:45] SUPERPOWER #2: Healthcare/compliance example. Show how audit trail is built-in, not bolted-on.
+                </aside>
+            </section>
+
+            <!-- Superpower #3: Debug by Replay -->
+            <section>
+                <h2>Superpower #3: Debug by Replay</h2>
+                <div class="slide-content">
+                    <p class="fragment key-message">
+                        Production bug? <span class="highlight-orange">Replay the exact event sequence</span> in development.
+                    </p>
+                    <pre class="fragment mt-tight code-block"><code class="language-ruby" data-trim>
+# Export events from production
+events = EventStore.read_stream("Order-12345")
+
+# Replay in development
+events.each { |event| apply_event(event) }
+
+# Now debug with the EXACT state that caused the bug
+                    </code></pre>
+                    <p class="fragment key-message mt-tight">
+                        No more "works on my machine" — you have the exact reproduction steps.
+                    </p>
+                    <p class="fragment mt-tight">
+                        Fix bugs with confidence, knowing you can verify the fix against real data.
+                    </p>
+                </div>
+                <aside class="notes">
+                    [10:45-11:15] SUPERPOWER #3: Debugging use case. Show how event replay makes production bugs reproducible.
+                </aside>
+            </section>
+
+            <!-- Superpower #4: Event-Driven Scale -->
+            <section>
+                <h2>Superpower #4: Event-Driven Architecture</h2>
+                <div class="slide-content">
+                    <p class="fragment key-message">
+                        Events enable <span class="highlight-cyan">loosely-coupled, horizontally scalable</span> systems.
+                    </p>
+                    <p class="fragment mt-normal">
+                        Each service subscribes to relevant events. Process millions of events per second across independent workers.
+                    </p>
+                    <p class="fragment key-message highlight-green mt-tight">
+                        Multiple read models, each optimized for its use case. Scale reads independently.
+                    </p>
+                </div>
+                <aside class="notes">
+                    [11:15-11:45] SUPERPOWER #4: Scale and real-world examples. Show that ES powers systems we use daily.
+                </aside>
+            </section>
+
+            <!-- ES Implementation Details -->
+
+            <!-- Temporal Queries - How They Work -->
+            <section>
+                <h2>Temporal Queries: How They Work</h2>
+                <p>Query state at <strong>any point in time</strong></p>
+                <pre class="mt-tight code-block"><code class="language-ruby" data-trim data-line-numbers>
+class CartRepository
+  def as_of(cart_id, timestamp)
+    # 1. Read events for this cart
+    events = EventStore
+      .read_stream("cart-#{cart_id}")
+      .select { |event| event.created_at <= timestamp }
+
+    # 2. Replay events to rebuild state
+    replay_events(events)
+  end
+
+  private
+
+  def replay_events(events)
+    cart = Cart.new
+    events.each { |event| cart.apply(event) }
+    cart
+  end
+end
+
+# Usage
+cart = CartRepository.as_of(123, Time.parse("2025-11-19 14:30"))
+cart.items # => State at 2:30 PM
+                </code></pre>
+                <p class="fragment key-message mt-tight">
+                    Filter events by time, replay → <strong>time travel</strong>
+                </p>
+                <aside class="notes">
+                    [11:45-12:15] Show HOW temporal queries work. Filter events before timestamp, replay them. This is how we resolve disputes.
+                </aside>
+            </section>
+
+            <!-- Event Replay - Rebuilding State -->
+            <section>
+                <h2>Event Replay: Rebuilding State</h2>
+                <p>State is <strong>derived</strong> from events, not stored</p>
+                <pre class="mt-tight code-block--small"><code class="language-ruby" data-trim data-line-numbers>
+class Cart
+  attr_reader :items, :total
+
+  def initialize
+    @items = []
+    @total = 0
+  end
+
+  def apply(event)
+    case event
+    when Events::ItemAdded
+      add_item(event.data)
+    when Events::ItemRemoved
+      remove_item(event.data)
+    when Events::CheckoutCompleted
+      complete_checkout(event.data)
+    end
+    self
+  end
+
+  private
+
+  def add_item(data)
+    @items << { product_id: data[:product_id], quantity: data[:quantity] }
+    @total += data[:price] * data[:quantity]
+  end
+end
+
+# Replay to get current state
+events = EventStore.read_stream("cart-123")
+cart = events.reduce(Cart.new) { |c, event| c.apply(event) }
+                </code></pre>
+                <aside class="notes">
+                    [12:15-12:45] Show the apply pattern. Each event type knows how to update state. Fold/reduce over events to rebuild.
+                </aside>
+            </section>
+
+            <!-- The External Systems Challenge -->
+            <section>
+                <h2>The External Systems Challenge</h2>
+                <div class="content-section">
+                    <p class="fragment" style="margin: 0 0 0.3em 0; font-size: 0.9em;">
+                        <span class="highlight-orange">Fowler's biggest warning:</span> You can't "undo" external actions
+                    </p>
+                    <div class="fragment" style="margin-top: 0.3em;">
+                        <h4>The Problem</h4>
+                        <ul style="margin: 0; line-height: 1.5; font-size: 0.75em;">
+                            <li style="margin: 0.2em 0;">Can't "unsend" an email</li>
+                            <li style="margin: 0.2em 0;">Can't "uncharge" a credit card</li>
+                            <li style="margin: 0.2em 0;">Can't undo API calls to 3rd parties</li>
+                        </ul>
+                    </div>
+                    <div class="fragment" style="margin-top: 0.3em;">
+                        <h4>The Solution</h4>
+                        <ul style="margin: 0; line-height: 1.5; font-size: 0.75em;">
+                            <li style="margin: 0.2em 0;">Gateway pattern with idempotency keys</li>
+                            <li style="margin: 0.2em 0;">Track what external actions were taken</li>
+                            <li style="margin: 0.2em 0;">Check before performing action again</li>
+                        </ul>
+                    </div>
+                    <p class="fragment" style="margin: 0.3em 0 0 0; font-size: 0.85em;">
+                        This is why ES requires <strong>careful integration design</strong>
+                    </p>
+                </div>
+                <aside class="notes">
+                    [12:45-13:15] Fowler emphasizes this heavily. ES replay assumes pure functions. External systems break that assumption. Must handle carefully.
+                </aside>
+            </section>
+
+            <!-- Gateway Pattern for External Systems -->
+            <section>
+                <h2>Gateway Pattern: Idempotent Actions</h2>
+                <p>Track what was sent, don't resend on replay</p>
+                <pre class="mt-tight code-block--small"><code class="language-ruby" data-trim data-line-numbers>
+class EmailGateway
+  def send_order_confirmation(event)
+    # Check if already sent
+    return if already_sent?(event.id)
+
+    begin
+      EmailService.send(
+        to: event.data[:email],
+        subject: "Order Confirmation",
+        body: email_body(event.data)
+      )
+
+      track_as_sent(event.id)
+    rescue => e
+      log_error(event.id, e)
+      raise
+    end
+  end
+
+  private
+
+  def already_sent?(event_id)
+    SentEmails.exists?(event_id: event_id)
+  end
+
+  def track_as_sent(event_id)
+    SentEmails.create!(
+      event_id: event_id,
+      sent_at: Time.current,
+      idempotency_key: event_id
+    )
+  end
+end
+
+# On replay, emails won't be resent because already_sent? returns true
+                </code></pre>
+                <aside class="notes">
+                    [13:15-13:45] Gateway checks tracking table. If already sent, skip. Event ID as idempotency key. Essential for production ES systems.
+                </aside>
+            </section>
+
+            <!-- Pattern Comparison -->
+            <section>
+                <h2>How These 4 Patterns Relate</h2>
+                <p style="font-size: 0.65em; margin: 0 0 0.2em 0;">Each pattern serves different needs, but they work together beautifully</p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.3em; margin-top: 0.15em;">
+                    <div class="fragment" style="background: rgba(51, 153, 255, 0.15); padding: 0.3em; border-radius: 8px; border-left: 3px solid var(--color-blue);">
+                        <h4 style="margin: 0; font-size: 0.75em; color: var(--color-blue);">Event Notification</h4>
+                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Loose coupling</p>
+                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Simple alerts</p>
+                    </div>
+
+                    <div class="fragment" style="background: rgba(6, 182, 212, 0.15); padding: 0.3em; border-radius: 8px; border-left: 3px solid var(--color-cyan);">
+                        <h4 style="margin: 0; font-size: 0.75em; color: var(--color-cyan);">Event-Carried State</h4>
+                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Data distribution</p>
+                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Reduce queries</p>
+                    </div>
+
+                    <div class="fragment" style="background: rgba(255, 107, 53, 0.15); padding: 0.3em; border-radius: 8px; border-left: 3px solid var(--color-orange);">
+                        <h4 style="margin: 0; font-size: 0.75em; color: var(--color-orange);">Event Sourcing</h4>
+                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Complete history</p>
+                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Temporal queries</p>
+                    </div>
+
+                    <div class="fragment" style="background: rgba(16, 185, 129, 0.15); padding: 0.3em; border-radius: 8px; border-left: 3px solid var(--color-green);">
+                        <h4 style="margin: 0; font-size: 0.75em; color: var(--color-green);">CQRS</h4>
+                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Optimized reads</p>
+                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Complex queries</p>
+                    </div>
+                </div>
+
+                <div class="fragment" style="margin-top: 0.15em; background: rgba(247, 147, 30, 0.1); padding: 0.25em 0.4em; border-radius: 8px;">
+                    <p style="margin: 0 0 0.15em 0; font-size: 0.7em; font-weight: 600;">💡 Common Combinations</p>
+                    <ul style="margin: 0 0 0 1.2em; line-height: 1.2; font-size: 0.6em;">
+                        <li style="margin: 0.1em 0;"><strong class="highlight-orange">Event Sourcing + CQRS</strong> is the power combo</li>
+                        <li style="margin: 0.1em 0;"><strong class="highlight-blue">Event Notification</strong> works with any pattern</li>
+                        <li style="margin: 0.1em 0;"><strong>Event Bus:</strong> Infrastructure layer enabling all patterns</li>
+                    </ul>
+                </div>
+
+                <aside class="notes">
+                    [13:45-14:15] Show how patterns complement each other. ES + CQRS most powerful. Event Bus is infrastructure. Kode Health uses all 4 together in production.
+                </aside>
+            </section>
+
+            <!-- When to Use -->
+            <section>
+                <h2>When Should You Use Event Sourcing?</h2>
+                <div class="two-column mt-normal">
+                    <div>
+                        <h4 class="highlight-green">Good Fit</h4>
+                        <ul class="pattern__list">
+                            <li>Audit and compliance requirements</li>
+                            <li>Complex business workflows</li>
+                            <li>Need temporal queries</li>
+                            <li>Event-driven domains</li>
+                            <li>Debugging production issues</li>
+                            <li>Financial systems</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="highlight-orange">Think Twice</h4>
+                        <ul class="pattern__list">
+                            <li>Simple CRUD applications</li>
+                            <li>Heavy ad-hoc reporting needs</li>
+                            <li>Team unfamiliar with pattern</li>
+                            <li>Tight deadlines / MVP</li>
+                            <li>Frequent schema changes</li>
+                            <li>External system integration challenges</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="fragment highlight-blue mt-normal" style="font-style: italic;">
+                    "Use Event Sourcing when you EXPECT to need audit, temporal queries, or event replay" — Fowler
+                </p>
+                <aside class="notes">
+                    [10:30-11:15] Honest assessment from Fowler's article - when it's valuable, when it's overkill.
+                </aside>
+            </section>
+
+            <!-- Real World Examples -->
+            <section>
+                <h2>Who Uses Event Sourcing?</h2>
+                <div class="three-column mt-normal">
+                    <div class="fragment">
+                        <h4 class="highlight-blue">Netflix</h4>
+                        <p>Billions of viewing events power your recommendations</p>
+                    </div>
+                    <div class="fragment">
+                        <h4 class="highlight-orange">TikTok</h4>
+                        <p>Every scroll, like, share builds your feed</p>
+                    </div>
+                    <div class="fragment">
+                        <h4 class="highlight-green">Uber</h4>
+                        <p>Millions of GPS events per minute</p>
+                    </div>
+                    <div class="fragment">
+                        <h4 class="highlight-cyan">Stripe</h4>
+                        <p>Financial transactions require perfect audit trail</p>
+                    </div>
+                    <div class="fragment">
+                        <h4 class="highlight-blue">GitHub</h4>
+                        <p>Git IS Event Sourcing - every commit is immutable</p>
+                    </div>
+                    <div class="fragment">
+                        <h4 class="highlight-green">Your Bank</h4>
+                        <p>500+ years of proven reliability</p>
+                    </div>
+                </div>
+                <p class="fragment highlight-orange key-message mt-normal">
+                    You're already using Event Sourced systems every single day.
+                </p>
+                <aside class="notes">
+                    [12:15-12:45] Real-world 2025 examples - Netflix, TikTok, Stripe, Uber. Services the audience uses daily. Git is always an "aha!" moment - they've been using ES without knowing it!
+                </aside>
+            </section>
+
+            <!-- SECTION 5: HOW TO (3-4 min) -->
+
+            <!-- Rails Implementation Options -->
+            <section>
+                <h2>Event Sourcing in Rails</h2>
+                <p>Several options for Rails developers:</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 0.8em;">
+                    <div class="fragment">
+                        <h4 class="highlight-blue">Rails Event Store</h4>
+                        <p>Production-ready gem by Arkency</p>
+                        <p class="small-text">PostgreSQL-based, great docs</p>
+                    </div>
+                    <div class="fragment">
+                        <h4 class="highlight-cyan">Sequent</h4>
+                        <p>CQRS and Event Sourcing framework</p>
+                        <p class="small-text">PostgreSQL, strong opinions</p>
+                    </div>
+                    <div class="fragment">
+                        <h4 class="highlight-orange">Kafka + Karafka</h4>
+                        <p>Distributed event streaming</p>
+                        <p class="small-text">Heavy-duty, high scale</p>
+                    </div>
+                    <div class="fragment">
+                        <h4 class="highlight-green">Roll Your Own</h4>
+                        <p>PostgreSQL tables + patterns</p>
+                        <p class="small-text">Full control, more work</p>
+                    </div>
+                </div>
+                <aside class="notes">
+                    [11:45-12:15] Different implementation options. Rails Event Store is the easiest starting point.
+                </aside>
+            </section>
+
+            <!-- Simple PostgreSQL Schema -->
+            <section>
+                <h2>Simple PostgreSQL Event Store</h2>
+                <pre class="code-block"><code class="language-sql" data-trim>
+-- Events table (append-only)
+CREATE TABLE events (
+  id UUID PRIMARY KEY,
+  event_type VARCHAR NOT NULL,
+  data JSONB NOT NULL,
+  metadata JSONB,
+  created_at TIMESTAMP NOT NULL
+);
+
+-- Streams (logical grouping)
+CREATE TABLE streams (
+  id SERIAL PRIMARY KEY,
+  stream_name VARCHAR NOT NULL UNIQUE,
+  event_id UUID REFERENCES events(id),
+  position INTEGER NOT NULL
+);
+                </code></pre>
+                <p class="fragment mt-normal">That's it! Two tables. Simple, scalable, PostgreSQL-native.</p>
+                <aside class="notes">
+                    [12:15-12:45] Show how simple the database schema can be. Demystify the implementation.
+                </aside>
+            </section>
+
+            <!-- Rails Event Store Example -->
+            <section>
+                <h3>Rails Event Store Example</h3>
+                <pre class="code-block"><code class="language-ruby" data-trim>
+# Gemfile
+gem 'rails_event_store'
+
+# config/initializers/event_store.rb
+Rails.configuration.to_prepare do
+  Rails.configuration.event_store = RailsEventStore::Client.new
+
+  # Subscribe handlers to events
+  event_store = Rails.configuration.event_store
+  event_store.subscribe(UpdateCartReadModel, to: [ItemAddedToCart])
+end
+
+# Publishing an event
+event_store.publish(ItemAddedToCart.new(data: {
+  cart_id: cart.id, product_id: product.id, quantity: 2
+}), stream_name: "Cart-#{cart.id}")
+                </code></pre>
+                <aside class="notes">
+                    [12:45-13:30] Practical Rails Event Store code. Show how easy it is to get started.
+                </aside>
+            </section>
+
+            <!-- Testing -->
+            <section>
+                <h2>Testing is Beautiful</h2>
+                <pre class="code-block"><code class="language-ruby" data-trim>
+# Given: Cart with these events
+given_events = [
+  CartCreated.new(data: { cart_id: "abc123" }),
+  ItemAdded.new(data: { cart_id: "abc123", product_id: "xyz" })
+]
+
+# When: I run a command
+result = AddItemToCart.new.handle(command)
+
+# Then: I expect this event
+expect(result).to be_success
+expect(result.value).to be_a(ItemAddedToCart)
+                </code></pre>
+                <p class="fragment mt-normal">
+                    Test <span class="highlight-blue">behavior</span> and <span class="highlight-green">events</span>, not database state.
+                </p>
+                <aside class="notes">
+                    [13:30-14:00] Testing with events is clean, deterministic, focused on behavior.
+                </aside>
+            </section>
+
+            <!-- SECTION 6: CLOSE (2-3 min) -->
+
+            <!-- Key Takeaways -->
+            <section>
+                <h2>Three Things to Remember</h2>
+                <ol class="mt-loose" style="line-height: 1.7;">
+                    <li class="fragment">
+                        Event Sourcing = Store <span class="highlight-orange">events</span> + derive <span class="highlight-green">state</span>
+                    </li>
+                    <li class="fragment">
+                        Use it when you need <span class="highlight-blue">audit trails</span>, <span class="highlight-blue">temporal queries</span>, or <span class="highlight-blue">event replay</span>
+                    </li>
+                    <li class="fragment">
+                        Rails has great tools — <span class="highlight-green">start small</span>, learn the pattern
+                    </li>
+                </ol>
+                <aside class="notes">
+                    [14:00-14:45] Reinforce the three main learning objectives from the beginning.
+                </aside>
+            </section>
+
+            <!-- Resources -->
+            <section>
+                <h2>Learn More</h2>
+                <ul class="mt-normal">
+                    <li><strong>Martin Fowler:</strong> martinfowler.com/eaaDev/EventSourcing.html</li>
+                    <li><strong>Rails Event Store:</strong> railseventstore.org</li>
+                    <li><strong>Greg Young:</strong> "CQRS and Event Sourcing" talks on YouTube</li>
+                    <li><strong>Vaughn Vernon:</strong> "Implementing Domain-Driven Design"</li>
+                    <li><strong>EventStoreDB:</strong> eventstore.com (if you need dedicated event store)</li>
+                </ul>
+                <p class="supporting-text mt-loose">
+                    Slides available in the meetup channel
+                </p>
+                <aside class="notes">
+                    [15:30-16:00] Resources for continued learning. Point to the best materials.
+                </aside>
+            </section>
+
+            <!-- Thank You -->
+            <section data-transition="zoom">
+                <h1>Questions?</h1>
+                <p class="key-message mt-loose">
+                    Let's learn together.
+                </p>
+                <p class="mt-loose">
+                    Chris Miles<br>
+                    <span class="small-text">chris@kodehealth.com</span>
+                </p>
+                <aside class="notes">
+                    [16:00-18:00] Open for Q&A. Stay humble - "I'm still learning too, so let's figure this out together."
+                </aside>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/plugin/zoom/zoom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/plugin/markdown/markdown.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            transition: 'slide',
+            fragments: true,
+
+            // Presentation size (16:9 aspect ratio)
+            width: 1280,
+            height: 720,
+            margin: 0.04,
+
+            // Plugins
+            plugins: [ RevealNotes, RevealHighlight, RevealZoom, RevealMarkdown ]
+        });
+
+        // IRB Easter Egg - ASCII Ruby Animation
+        // Exact port of Ruby's IRB.send(:easter_egg) animation
+        class Vec {
+            constructor(x, y, z) {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+            }
+
+            sub(other) {
+                return new Vec(this.x - other.x, this.y - other.y, this.z - other.z);
+            }
+
+            dot(other) {
+                return this.x * other.x + this.y * other.y + this.z * other.z;
+            }
+
+            cross(other) {
+                return new Vec(
+                    this.y * other.z - this.z * other.y,
+                    this.z * other.x - this.x * other.z,
+                    this.x * other.y - this.y * other.x
+                );
+            }
+
+            normalize() {
+                const len = Math.sqrt(this.dot(this));
+                return new Vec(this.x / len, this.y / len, this.z / len);
+            }
+        }
+
+        class Canvas {
+            constructor(h, w, fixedScale = null) {
+                this.h = h;
+                this.w = w;
+                // Use fixed scale if provided, otherwise original IRB formula
+                this.scale = fixedScale !== null ? fixedScale : Math.min(w / 2.0, h - 2);
+                // EXACT IRB formula: center = Complex(w / 2, h - 2)
+                this.center = { re: w / 2, im: h - 2 };
+                this.data = Array(h).fill(null).map(() => Array(w).fill(0));
+            }
+
+            line(p1, p2) {
+                const [x1, y1] = p1;
+                const [x2, y2] = p2;
+
+                // EXACT IRB: Transform to screen coordinates INSIDE line method
+                // p1 = Complex(x1, y1) / 2 * @scale + @center
+                const sp1x = (x1 / 2) * this.scale + this.center.re;
+                const sp1y = (y1 / 2) * this.scale + this.center.im;
+                const sp2x = (x2 / 2) * this.scale + this.center.re;
+                const sp2y = (y2 / 2) * this.scale + this.center.im;
+
+                this.line0(sp1x, sp1y, sp2x, sp2y);
+            }
+
+            line0(x1, y1, x2, y2) {
+                // EXACT IRB line0 implementation
+                const midx = (x1 + x2) / 2;
+                const midy = (y1 + y2) / 2;
+
+                // EXACT IRB: use distance formula
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 1) {
+                    const xi = Math.floor(midx);
+                    const yi = Math.floor(midy);
+
+                    // EXACT IRB: use y/2 for array index, y%2>1 for bit pattern, |= for accumulation
+                    const rowIdx = Math.floor(yi / 2);
+                    if (xi >= 0 && xi < this.w && rowIdx >= 0 && rowIdx < this.h) {
+                        this.data[rowIdx][xi] |= (yi % 2 > 1 ? 2 : 1);
+                    }
+                    return;
+                }
+
+                this.line0(x1, y1, midx, midy);
+                this.line0(midx, midy, x2, y2);
+            }
+
+            draw() {
+                const chars = " ',;";  // EXACT IRB character set: 4 chars (space, apostrophe, comma, semicolon)
+                return this.data.map(row =>
+                    row.map(n => chars[n] || ' ').join('')
+                ).join('\n');
+            }
+
+            clear() {
+                this.data = Array(this.h).fill(null).map(() => Array(this.w).fill(0));
+            }
+        }
+
+        class RubyModel {
+            constructor() {
+                this.vertices = [];
+                this.faces = [];
+                this.initRubyModel();
+            }
+
+            initRubyModel() {
+                // Cap vertices (6 points at z=1) - indices 0-5 - EXACT IRB
+                const capVertices = [];
+                for (let i = 0; i < 6; i++) {
+                    const angle = i * Math.PI / 3;
+                    capVertices.push(new Vec(Math.cos(angle), Math.sin(angle), 1));
+                    this.vertices.push(capVertices[i]);
+                }
+
+                // Middle vertices (6 points at z=0, radius 2, offset 30°) - indices 6-11
+                const middleVertices = [];
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i + 0.5) * Math.PI / 3;
+                    middleVertices.push(new Vec(2 * Math.cos(angle), 2 * Math.sin(angle), 0));
+                    this.vertices.push(middleVertices[i]);
+                }
+
+                // Bottom vertex - index 12 - EXACT IRB
+                const bottomVertex = new Vec(0, 0, -2);
+                this.vertices.push(bottomVertex);
+
+                // EXACT IRB face construction
+                // First face: top cap hexagon (6 vertices)
+                this.faces.push([0, 1, 2, 3, 4, 5]);
+
+                // 18 triangular faces using IRB's i = j-1 pattern
+                for (let j = 0; j < 6; j++) {
+                    const i = j - 1;
+                    const capI = (i + 6) % 6;  // Handle negative index like Ruby
+                    const midI = (i + 6) % 6;
+                    const capJ = j;
+                    const midJ = j;
+
+                    this.faces.push([capI, 6 + midI, capJ]);
+                    this.faces.push([capJ, 6 + midI, 6 + midJ]);
+                    this.faces.push([6 + midI, 12, 6 + midJ]);
+                }
+            }
+
+            renderFrame(i, canvas) {
+                canvas.clear();
+                const angle = i / 10.0;
+
+                // Camera direction - EXACT IRB formula
+                // IRB: Vec.new(*Complex.polar(1, angle).rect, Math.sin(angle))
+                const dir = new Vec(
+                    Math.cos(angle),
+                    Math.sin(angle),
+                    Math.sin(angle)
+                ).normalize();
+
+                // Camera basis vectors - EXACT IRB formula
+                // IRB: Vec.new(*Complex.polar(1, angle - Math::PI/2).rect, 0)
+                const dir2 = new Vec(
+                    Math.cos(angle - Math.PI / 2),
+                    Math.sin(angle - Math.PI / 2),
+                    0
+                );
+                const up = dir.cross(dir2);
+                const nm = dir.cross(up);  // IRB uses nm for x-projection, not dir2!
+
+                // Render faces with CORRECT backface culling
+                for (const face of this.faces) {
+                    // Get actual vertices for this face
+                    const vertices = face.map(idx => this.vertices[idx]);
+                    const v0 = vertices[0];
+                    const v1 = vertices[1];
+                    const v2 = vertices[2];
+
+                    // FIXED: IRB renders when > 0 (front-facing), skips when <= 0 (back-facing)
+                    if (v1.sub(v0).cross(v2.sub(v0)).dot(dir) > 0) {
+                        // EXACT IRB: Project vertices to 2D using nm and up
+                        const points = vertices.map(v =>
+                            [nm.dot(v), up.dot(v)]
+                        );
+
+                        // EXACT IRB: Pass raw projected points to line (scaling happens inside line method)
+                        for (let i = 0; i < points.length; i++) {
+                            canvas.line(points[i], points[(i + 1) % points.length]);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Initialize and start animation
+        const container = document.getElementById('ruby-ascii');
+        if (container) {
+            // Tighter canvas dimensions for more compact gem
+            const canvas = new Canvas(32, 80, 28);
+            const model = new RubyModel();
+            let frame = 0;
+
+            function animate() {
+                model.renderFrame(frame, canvas);
+                container.textContent = canvas.draw();
+                frame++;
+                setTimeout(animate, 50); // Original IRB timing: sleep 0.05 = 50ms = 20fps
+            }
+
+            animate();
+        }
+    </script>
+</body>
+</html>
