@@ -96,7 +96,7 @@
         /* Semantic typography classes for consistency */
         .key-message {
             font-size: 0.95em; /* Emphasized text: 34px */
-            font-weight: 600;
+            font-weight: 400; /* Normal weight - let <strong> tags provide emphasis */
             line-height: 1.5;
         }
 
@@ -587,18 +587,18 @@ SELECT * FROM orders WHERE customer_id = 'cust_123' AND date = '2025-11-19';
                 <h2>Hi, I'm Chris Miles</h2>
                 <div class="slide-content">
                     <p class="fragment key-message">
-                        <strong>Previously:</strong> 3.5 years at Orange Barrel Media
+                        <strong>Previously:</strong> 3.5 years at <span style="color: var(--color-orange);">Orange Barrel Media</span>
                     </p>
                     <p class="fragment supporting-text mt-tight" style="padding-left: 1.5em;">
-                        Building Rails apps right across the street from here
+                        Working on Rails apps right across the street from here
                     </p>
                     <p class="fragment key-message mt-normal">
-                        <strong>Three months ago:</strong> I joined Kode Health.
+                        <strong>Three months ago:</strong> I joined <span style="color: var(--color-blue);">Kode Health</span>.
                     </p>
                     <p class="fragment key-message mt-normal">
                         <strong>Day 1:</strong> "Everything here uses Event Sourcing."
                     </p>
-                    <p class="fragment highlight-orange key-message mt-normal">
+                    <p class="fragment highlight-cyan key-message mt-normal">
                         I had no idea what that meant.
                     </p>
                     <p class="fragment key-message mt-normal">
