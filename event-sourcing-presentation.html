@@ -36,6 +36,7 @@
             --color-cyan: #4db8c4;        /* Accent - Desaturated from #44bec7 */
             --color-orange: #f0a05c;      /* Warning - Desaturated from #ed7d31 */
             --color-green: #82c466;       /* Success - Desaturated from #70ad47 */
+            --color-purple: #9B7FBD;      /* Aggregate - Desaturated purple for dark bg */
             --color-red: #e5707d;         /* Error - Desaturated */
 
             /* ==================== SPACING ==================== */
@@ -115,6 +116,7 @@
         .highlight-cyan { color: var(--color-cyan); font-weight: 600; }
         .highlight-orange { color: var(--color-orange); font-weight: 600; }
         .highlight-green { color: var(--color-green); font-weight: 600; }
+        .highlight-purple { color: var(--color-purple); font-weight: 600; }
         .highlight-red { color: var(--color-red); font-weight: 600; }
 
         /* Text utilities using design tokens */
@@ -1002,7 +1004,8 @@ Date         Transaction            Amount      Balance
 
             <!-- Event Sourcing Definition -->
             <section>
-                <h2>Event Sourcing Defined</h2>
+                <h2>The Formal Definition</h2>
+                <p class="key-message">You understand the concept. Here's the technical definition:</p>
                 <blockquote class="mt-normal">
                     "Capture all changes to application state as a sequence of events. These event objects are stored in the same sequence they were applied, for the same lifetime as the application state itself."
                     <footer class="mt-normal">— Martin Fowler</footer>
@@ -1014,13 +1017,13 @@ Date         Transaction            Amount      Balance
                     <p class="mt-tight">State = computed from events</p>
                 </div>
                 <aside class="notes">
-                    [4:45-5:30] Formal definition from Fowler, then break it down into plain language.
+                    [4:45-5:30] Bridge from bank analogy to technical definition. Fowler gives authority, translation makes it digestible. Natural progression: accessible → technical → practical.
                 </aside>
             </section>
 
-            <!-- Five Building Blocks -->
+            <!-- Six Building Blocks -->
             <section>
-                <h2>Five Building Blocks</h2>
+                <h2>Six Building Blocks</h2>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8em; margin-top: 0.8em; font-size: 0.75em;">
                     <div class="grid-box fragment" style="border-color: var(--color-blue);">
                         <h4 class="highlight-blue">1. Command</h4>
@@ -1029,58 +1032,73 @@ Date         Transaction            Amount      Balance
                     </div>
                     <div class="grid-box fragment" style="border-color: var(--color-cyan);">
                         <h4 class="highlight-cyan">2. Command Handler</h4>
-                        <p>Validates business rules</p>
-                        <p class="small-text">Produces events if valid</p>
+                        <p>Orchestration layer</p>
+                        <p class="small-text">Loads aggregate, saves events</p>
+                    </div>
+                    <div class="grid-box fragment" style="border-color: var(--color-purple);">
+                        <h4 class="highlight-purple">3. Aggregate</h4>
+                        <p>Domain logic, validates rules</p>
+                        <p><code>ShoppingCart</code></p>
                     </div>
                     <div class="grid-box fragment" style="border-color: var(--color-orange);">
-                        <h4 class="highlight-orange">3. Event</h4>
+                        <h4 class="highlight-orange">4. Event</h4>
                         <p>Immutable fact (past tense)</p>
                         <p><code>ItemAddedToCart</code></p>
                     </div>
                     <div class="grid-box fragment" style="border-color: var(--color-green);">
-                        <h4 class="highlight-green">4. Event Handler</h4>
+                        <h4 class="highlight-green">5. Event Handler</h4>
                         <p>Reacts to events</p>
                         <p class="small-text">Updates read models, side effects</p>
                     </div>
-                </div>
-                <div class="grid-box fragment mt-normal" style="border-color: var(--color-blue); font-size: 0.75em;">
-                    <h4 class="highlight-blue">5. Event Store</h4>
-                    <p>Append-only, immutable log of all events</p>
+                    <div class="grid-box fragment" style="border-color: var(--color-blue);">
+                        <h4 class="highlight-blue">6. Event Store</h4>
+                        <p>Append-only, immutable log of all events</p>
+                    </div>
                 </div>
                 <aside class="notes">
-                    [5:30-6:30] The five core building blocks. Keep it simple and visual.
+                    [5:30-6:30] Six core building blocks. KEY DISTINCTION: Command Handler = orchestration (loads/saves), Aggregate = business logic (validates domain rules). Handler is application layer glue, Aggregate is domain layer brain. This separation is crucial but often missed.
                 </aside>
             </section>
 
             <!-- The Flow -->
             <section>
                 <h2>The Event Sourcing Flow</h2>
-                <div class="flow-diagram">
-                    <div class="flow-step fragment">
+                <div class="flow-diagram" style="margin-top: 1.5em; font-size: 0.65em;">
+                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Command</strong>
                         <span class="small-text">Intent</span>
                     </div>
                     <div class="flow-arrow fragment">→</div>
-                    <div class="flow-step fragment">
+                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Handler</strong>
+                        <span class="small-text">Load</span>
+                    </div>
+                    <div class="flow-arrow fragment">→</div>
+                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
+                        <strong>Aggregate</strong>
                         <span class="small-text">Validate</span>
                     </div>
                     <div class="flow-arrow fragment">→</div>
-                    <div class="flow-step fragment">
+                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Event</strong>
-                        <span class="small-text">Fact</span>
+                        <span class="small-text">Store</span>
                     </div>
                     <div class="flow-arrow fragment">→</div>
-                    <div class="flow-step fragment">
+                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Reaction</strong>
                         <span class="small-text">Update</span>
                     </div>
                 </div>
-                <p class="fragment mt-loose">
-                    User wants to do something → System validates → Event created → State updated
-                </p>
+                <div class="fragment" style="margin-top: 1.5em; font-size: 0.85em; text-align: left; max-width: 90%;">
+                    <p class="key-message" style="margin-bottom: 0.5em;"><strong>How it works:</strong></p>
+                    <p style="margin: 0.3em 0;">1. User clicks "Add to Cart" → creates <code>AddItemToCart</code> command</p>
+                    <p style="margin: 0.3em 0;">2. Handler receives command, loads <code>ShoppingCart</code> by <strong>replaying past events</strong></p>
+                    <p style="margin: 0.3em 0;">3. Cart validates: Is quantity valid? Is item in stock? (business rules)</p>
+                    <p style="margin: 0.3em 0;">4. If valid → <code>ItemAddedToCart</code> event produced and saved to Event Store</p>
+                    <p style="margin: 0.3em 0;">5. Multiple handlers react independently: update read model, send analytics, reserve inventory</p>
+                </div>
                 <aside class="notes">
-                    [7:15-7:45] Visual flow showing the complete cycle from command to reaction.
+                    [7:15-7:45] The mechanics of the flow. KEY: Handler reconstructs aggregate state by replaying events (not loading from DB!). Aggregate validates business rules. Events are facts - multiple handlers can react independently and asynchronously. This shows HOW the pieces interact, not just WHAT they are.
                 </aside>
             </section>
 
