@@ -293,7 +293,7 @@
         .reveal ul,
         .reveal ol {
             font-size: 1em; /* Container inherits body size */
-            margin: 0.5em 0;
+            margin: 0;  /* Remove default margin for tighter layouts */
         }
 
         .reveal li {
@@ -398,26 +398,35 @@
 
         .pattern__benefits h4 {
             color: var(--color-green);
-            margin: 0;
-            font-size: 0.95em;
+            margin: 0 0 0.1em 0;  /* Tighter space below header */
+            font-size: 0.8em;  /* Reduced for compact display */
             font-weight: 600;
         }
 
         .pattern__pitfalls h4,
         .pattern__tradeoffs h4 {
             color: var(--color-orange);
-            margin: 0;
-            font-size: 0.95em;
+            margin: 0 0 0.1em 0;  /* Tighter space below header */
+            font-size: 0.8em;  /* Reduced for compact display */
             font-weight: 600;
         }
 
         .pattern__list {
             margin: 0;
-            line-height: 1.5;
+            line-height: 1.3;  /* Tighter line height */
+            font-size: 0.75em;  /* Reduced further for more compact display */
         }
 
         .pattern__list li {
-            margin: 0.3em 0;
+            margin: 0.15em 0;  /* Tighter spacing between items */
+        }
+
+        .pattern__examples {
+            margin-top: 0.3em;  /* Minimal top spacing */
+            font-size: 0.6em;  /* Even smaller examples text */
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.2;  /* Tighter line height */
         }
 
         /* Content Section Component (for Problem/Solution layouts) */
@@ -665,10 +674,10 @@ order.update!(status: 'shipped')
                     </div>
                 </div>
                 <p class="fragment key-message mt-normal">
-                    Event Sourcing = Store the events + derive the state
+                    This approach is called <strong class="highlight-orange">Event Sourcing</strong>.
                 </p>
                 <aside class="notes">
-                    [2:00-2:45] THE KEY INSIGHT from Fowler: We store BOTH the immutable event log AND the current application state. This is critical to understanding Event Sourcing.
+                    [2:00-2:45] THE KEY INSIGHT from Fowler: We store BOTH the immutable event log AND the current application state. Name the pattern but don't define it yet - let curiosity build. Full definition comes later after distinguishing all 4 patterns.
                 </aside>
             </section>
 
@@ -677,18 +686,24 @@ order.update!(status: 'shipped')
             <!-- Today's Roadmap -->
             <section>
                 <h2>Today's Roadmap</h2>
-                <p>There are 4 event patterns that often get confused:</p>
+                <p class="key-message">Researching Event Sourcing led me to a broader landscape:</p>
+                <p class="key-message mt-tight" style="color: var(--color-cyan);">
+                    The "event-driven" world.
+                </p>
+                <p class="supporting-text mt-normal">
+                    I quickly learned this world has 4 commonly confused patterns:
+                </p>
                 <ol class="mt-tight">
                     <li class="fragment"><strong class="highlight-blue">Event Notification</strong> <span class="small-text">(Simple pub/sub)</span></li>
                     <li class="fragment"><strong class="highlight-cyan">Event-Carried State Transfer</strong> <span class="small-text">(Events contain full data)</span></li>
-                    <li class="fragment"><strong class="highlight-orange">Event Sourcing</strong> <span class="small-text">(Events as source of truth)</span></li>
                     <li class="fragment"><strong class="highlight-green">CQRS</strong> <span class="small-text">(Separate read/write models)</span></li>
+                    <li class="fragment"><strong class="highlight-orange">Event Sourcing</strong> <span class="small-text">(Events as source of truth)</span></li>
                 </ol>
                 <p class="fragment key-message mt-normal">
-                    We'll understand all 4, dive deep into Event Sourcing, then see how to implement in Rails.
+                    <strong>Our journey:</strong> Quickly distinguish these 4 patterns, then deep-dive Event Sourcing.
                 </p>
                 <aside class="notes">
-                    [3:30-4:30] These patterns get confused. Set clear expectations: brief context on all 4, deep dive on ES, Rails implementation.
+                    [3:30-4:30] Natural progression: researching ES led to discovering the broader event-driven landscape. Fowler's authority establishes these are legitimately confused. Set expectations: brief context to distinguish all 4, then deep dive the one that solves our lost history problem.
                 </aside>
             </section>
 
@@ -704,20 +719,25 @@ order.update!(status: 'shipped')
                     <p class="pattern__detail fragment">
                         Source system sends notification, doesn't expect response
                     </p>
-                    <div class="pattern__benefits fragment">
-                        <h4>Benefits</h4>
-                        <ul class="pattern__list">
-                            <li>Low coupling between systems</li>
-                            <li>Simple to implement</li>
-                        </ul>
+                    <div class="two-column fragment" style="margin-top: 0.4em;">
+                        <div class="pattern__benefits">
+                            <h4>Benefits</h4>
+                            <ul class="pattern__list">
+                                <li>Low coupling between systems</li>
+                                <li>Simple to implement</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__pitfalls">
+                            <h4>Pitfalls</h4>
+                            <ul class="pattern__list">
+                                <li>Logic flow becomes implicit and hard to trace</li>
+                                <li>Difficult debugging when processes span multiple events</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="pattern__pitfalls fragment">
-                        <h4>Pitfall</h4>
-                        <ul class="pattern__list">
-                            <li>Logic flow becomes implicit and hard to trace</li>
-                            <li>Difficult debugging when processes span multiple events</li>
-                        </ul>
-                    </div>
+                    <p class="pattern__examples fragment">
+                        <strong>e.g.</strong> Stripe webhooks ("payment_succeeded"), Order placed → email + inventory + analytics
+                    </p>
                 </div>
                 <aside class="notes">
                     [4:30-5:30] First of 4 patterns. Simplest form: "hey, this happened". Low coupling is good, but hidden workflows are bad.
@@ -755,37 +775,43 @@ end
                 <h2>Pattern #2: Event-Carried State Transfer</h2>
                 <div class="pattern">
                     <p class="pattern__description fragment">
-                        Events contain <span class="highlight-cyan">full state data</span> so consumers can maintain local copies
+                        <span class="highlight-cyan">"Thicc events"</span> containing complete state data
                     </p>
                     <p class="pattern__detail fragment">
-                        No back-queries to source system needed
+                        Consumers maintain local copies, no back-queries needed
                     </p>
-                    <div class="pattern__benefits fragment">
-                        <h4>Benefits</h4>
-                        <ul class="pattern__list">
-                            <li>Greater resilience (no dependency on source)</li>
-                            <li>Reduced latency (local data)</li>
-                        </ul>
+                    <div class="two-column fragment" style="margin-top: 0.4em;">
+                        <div class="pattern__benefits">
+                            <h4>Benefits</h4>
+                            <ul class="pattern__list">
+                                <li>Services remain operational when source is down</li>
+                                <li>Fast local reads, no network latency</li>
+                                <li>Source system not hammered with queries</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>Trade-offs</h4>
+                            <ul class="pattern__list">
+                                <li>Duplicate data across services</li>
+                                <li>Each consumer manages synchronization</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="pattern__tradeoffs fragment">
-                        <h4>Trade-offs</h4>
-                        <ul class="pattern__list">
-                            <li>Data redundancy across services</li>
-                            <li>Complex receiver-side state management</li>
-                        </ul>
-                    </div>
+                    <p class="pattern__examples fragment">
+                        <strong>e.g.</strong> Customer address change → event contains full customer profile → Billing, Shipping, Marketing all maintain local copies
+                    </p>
                 </div>
                 <aside class="notes">
-                    [6:00-7:00] Second pattern: events are "fat" - contain everything. Trade redundancy for independence.
+                    [6:00-7:00] "Thicc events" gets a laugh and is memorable. Trade coupling for autonomy: services are independent but must manage their own state. Code example next slide shows this in action.
                 </aside>
             </section>
 
             <!-- Event-Carried State Transfer - Example -->
             <section>
                 <h2>Event-Carried State Transfer Example</h2>
-                <p>Customer address change → event contains <strong>full</strong> customer data</p>
+                <p>Customer Service broadcasts full state to multiple services</p>
                 <pre class="mt-tight code-block"><code class="language-ruby" data-trim data-line-numbers>
-# Event contains ALL customer data
+# Event contains complete customer state
 Events::CustomerUpdated.new(
   customer_id: 123,
   name: "John Smith",
@@ -800,18 +826,20 @@ Events::CustomerUpdated.new(
   preferences: { newsletter: true }
 )
 
-# Consumer maintains local copy
-class CustomerReadModel
+# Each service maintains own copy in own database
+class BillingCustomerCache
   def update_from_event(event)
-    self.update!(event.data) # Full state refresh
+    self.update!(event.data) # Local copy, no queries back
   end
 end
+
+# Marketing, Analytics, etc. - all have local copies
                 </code></pre>
                 <p class="fragment key-message mt-tight">
-                    Billing, Marketing, Analytics all have <span class="highlight-cyan">local customer copies</span>
+                    No queries back to the source — everything needed is in the event
                 </p>
                 <aside class="notes">
-                    [7:00-7:30] Fat events = resilience. Each service has its own copy, no queries back to customer service.
+                    [7:00-7:30] Events with complete state enable microservices autonomy. Each service (Billing, Marketing, Analytics) has its own database with its own customer copy. If Customer Service goes down, all three still function normally.
                 </aside>
             </section>
 
@@ -823,66 +851,115 @@ end
                     <p class="pattern__description fragment">
                         Separate <strong>data structures</strong> for reads vs writes
                     </p>
-                    <div class="two-column fragment mt-normal">
+                    <div class="two-column fragment" style="margin-top: 0.3em; font-size: 0.85em;">
                         <div>
-                            <h4 class="highlight-blue">Write Model</h4>
+                            <h4 class="highlight-blue" style="font-size: 0.9em; margin-bottom: 0.2em;">Write Model</h4>
                             <ul class="pattern__list">
-                                <li>Optimized for business logic</li>
-                                <li>Validates rules</li>
-                                <li>Produces events</li>
+                                <li>Enforces business rules</li>
+                                <li>Validates commands</li>
+                                <li>Updates state</li>
                             </ul>
                         </div>
                         <div>
-                            <h4 class="highlight-green">Read Model</h4>
+                            <h4 class="highlight-green" style="font-size: 0.9em; margin-bottom: 0.2em;">Read Model</h4>
                             <ul class="pattern__list">
+                                <li>Denormalized for speed</li>
+                                <li>Pre-computed values</li>
                                 <li>Optimized for queries</li>
-                                <li>Denormalized views</li>
-                                <li>Fast lookups</li>
                             </ul>
                         </div>
                     </div>
-                    <p class="pattern__detail fragment mt-normal">
-                        Often combined with ES, but <span class="highlight-orange">independent pattern</span>
+                    <div class="two-column fragment" style="margin-top: 0.4em;">
+                        <div class="pattern__benefits">
+                            <h4>Benefits</h4>
+                            <ul class="pattern__list">
+                                <li>Optimize reads/writes independently</li>
+                                <li>Scale read-heavy workloads</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>Trade-offs</h4>
+                            <ul class="pattern__list">
+                                <li>Eventual consistency between models</li>
+                                <li>Increased system complexity</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="pattern__examples fragment">
+                        <strong>e.g.</strong> Product catalog: millions browsing products, handful updating inventory
                     </p>
                 </div>
                 <aside class="notes">
-                    [7:30-8:30] Third pattern: separate models for reading vs writing. Not inherently event-based but often paired.
+                    [7:30-8:30] CQRS not inherently about events (Fowler warns this is confused). Key: optimize read-heavy systems. Product catalog perfect example: massive read traffic (browsing), minimal writes (inventory/price updates). Fowler warns "often misused" - only use when benefits outweigh complexity.
                 </aside>
             </section>
 
             <!-- CQRS - Example -->
             <section>
                 <h2>CQRS Example</h2>
-                <p>Shopping cart with separate write/read concerns</p>
+                <p>Product catalog: browsed constantly, updated rarely</p>
                 <pre class="mt-tight code-block"><code class="language-ruby" data-trim data-line-numbers>
-# Write Model - Business logic
-class AddItemToCartCommand
-  attribute :cart_id, String
-  attribute :product_id, String
-  attribute :quantity, Integer
+# Write Model - Normalized 'products' table
+class Product < ApplicationRecord
+  validates :name, :price, presence: true
+  validate :price_must_be_positive
+
+  after_update -> { ProductCatalogSyncJob.perform_later(id) }
 end
 
-class CartDecider
-  def decide(command)
-    return Failure("Invalid quantity") if command.quantity <= 0
-    Success(Events::ItemAdded.build(command.to_h))
-  end
+# Read Model - Denormalized 'product_catalog' table
+class ProductCatalogReadModel < ApplicationRecord
+  # Flattened columns: name, price, stock_level, avg_rating, review_count
+
+  scope :in_stock, -> { where("stock_level > 0") }
+  scope :by_category, ->(cat) { where(category: cat) }
+  scope :top_rated, -> { where("avg_rating >= 4.0") }
 end
 
-# Read Model - Query optimization
-class CartReadModel < ApplicationRecord
-  has_many :line_items
-
-  def total
-    line_items.sum { |item| item.price * item.quantity }
-  end
-end
+# ProductCatalogReadModel.in_stock.by_category("electronics").top_rated
+# => [{ name: "Laptop", price: 999.99, stock_level: 15, avg_rating: 4.5 }, ...]
                 </code></pre>
                 <p class="fragment key-message mt-tight">
-                    <strong>Different models</strong> for different jobs
+                    Denormalized read model means no joins, no calculations — just fast queries
                 </p>
                 <aside class="notes">
-                    [8:30-9:00] Commands/Deciders handle writes. ReadModels handle queries. Separation of concerns.
+                    [8:30-9:00] CQRS = different tables for writes vs reads. Write to normalized products (enforces rules), async update to denormalized product_catalog (pre-computed ratings/stock). Reads are fast - no joins, no calculations.
+                </aside>
+            </section>
+
+            <!-- Event Sourcing - Definition -->
+            <section>
+                <h2>Pattern #4: Event Sourcing</h2>
+                <div class="pattern">
+                    <p class="pattern__description fragment">
+                        Store <strong>all changes</strong> as immutable events
+                    </p>
+                    <p class="pattern__detail fragment">
+                        Current state computed by replaying event history
+                    </p>
+                    <div class="two-column fragment" style="margin-top: 0.4em;">
+                        <div class="pattern__benefits">
+                            <h4>Benefits</h4>
+                            <ul class="pattern__list">
+                                <li>Complete audit trail of every change</li>
+                                <li>Time travel: query state at any point in history</li>
+                                <li>Rebuild state by replaying events</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>Trade-offs</h4>
+                            <ul class="pattern__list">
+                                <li>External system integration complexity</li>
+                                <li>Storage overhead for event logs</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="pattern__examples fragment">
+                        <strong>e.g.</strong> Shopping cart: ItemAdded, ItemRemoved, CheckoutCompleted → can prove customer removed headphones at 2:15 PM
+                    </p>
+                </div>
+                <aside class="notes">
+                    [9:00-9:30] Fourth pattern: ES is the star of our show. Brief intro here - full deep dive coming. Bank transactions = 500 years of proof this works. Solves our opening problem: shopping cart dispute.
                 </aside>
             </section>
 
@@ -891,28 +968,28 @@ end
             <!-- Bank Account Analogy -->
             <section>
                 <h2>You Already Know This Pattern</h2>
-                <div class="slide-content mt-normal">
-                    <h4 class="fragment">Your Bank Account</h4>
-                    <pre class="fragment mt-tight code-block--full-width"><code class="language-text" data-trim>
+                <div class="slide-content" style="margin-top: 0.5em; font-size: 0.9em;">
+                    <h4 class="fragment" style="margin-bottom: 0.3em;">Your Bank Account</h4>
+                    <pre class="fragment code-block--full-width" style="margin-top: 0.3em; font-size: 0.45em;"><code class="language-text" data-trim>
 Date         Transaction            Amount      Balance
 --------------------------------------------------------
 2025-11-01   Deposit               +$1,000     $1,000
 2025-11-05   ATM Withdrawal        -$200       $800
 2025-11-10   Transfer Out          -$300       $500
                     </code></pre>
-                    <p class="fragment mt-normal">
+                    <p class="fragment" style="margin-top: 0.5em;">
                         Your bank doesn't just store <code>balance = $500</code>
                     </p>
-                    <p class="fragment key-message mt-tight">
+                    <p class="fragment key-message" style="margin-top: 0.3em;">
                         It stores every transaction, then computes the balance.
                     </p>
-                    <p class="fragment key-message mt-normal">
+                    <p class="fragment key-message" style="margin-top: 0.5em;">
                         <strong>That's Event Sourcing.</strong>
                     </p>
-                    <p class="fragment mt-tight">
-                        Since 1494, accountants have used <strong>double-entry bookkeeping</strong>: never erase ledger entries, only add corrections.
+                    <p class="fragment" style="margin-top: 0.3em;">
+                        Since 1494 (Luca Pacioli's <em>Summa de Arithmetica</em>), accountants have used <strong>double-entry bookkeeping</strong>: never erase ledger entries, only add corrections.
                     </p>
-                    <p class="fragment highlight-green key-message mt-tight">
+                    <p class="fragment highlight-green key-message" style="margin-top: 0.3em;">
                         This pattern has been battle-tested for <strong>500+ years</strong> in banking.
                     </p>
                 </div>
