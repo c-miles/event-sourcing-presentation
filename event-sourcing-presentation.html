@@ -1615,51 +1615,6 @@ end
                 </aside>
             </section>
 
-            <!-- Pattern Comparison -->
-            <section>
-                <h2>How These 4 Patterns Relate</h2>
-                <p style="font-size: 0.65em; margin: 0 0 0.2em 0;">Each pattern serves different needs, but they work together beautifully</p>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.3em; margin-top: 0.15em;">
-                    <div class="fragment" style="background: rgba(51, 153, 255, 0.15); padding: 0.3em; border-radius: 8px; border-left: 3px solid var(--color-blue);">
-                        <h4 style="margin: 0; font-size: 0.75em; color: var(--color-blue);">Event Notification</h4>
-                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Loose coupling</p>
-                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Simple alerts</p>
-                    </div>
-
-                    <div class="fragment" style="background: rgba(6, 182, 212, 0.15); padding: 0.3em; border-radius: 8px; border-left: 3px solid var(--color-cyan);">
-                        <h4 style="margin: 0; font-size: 0.75em; color: var(--color-cyan);">Event-Carried State</h4>
-                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Data distribution</p>
-                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Reduce queries</p>
-                    </div>
-
-                    <div class="fragment" style="background: rgba(255, 107, 53, 0.15); padding: 0.3em; border-radius: 8px; border-left: 3px solid var(--color-orange);">
-                        <h4 style="margin: 0; font-size: 0.75em; color: var(--color-orange);">Event Sourcing</h4>
-                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Complete history</p>
-                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Temporal queries</p>
-                    </div>
-
-                    <div class="fragment" style="background: rgba(16, 185, 129, 0.15); padding: 0.3em; border-radius: 8px; border-left: 3px solid var(--color-green);">
-                        <h4 style="margin: 0; font-size: 0.75em; color: var(--color-green);">CQRS</h4>
-                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Optimized reads</p>
-                        <p style="font-size: 0.6em; margin: 0.1em 0 0 0; line-height: 1.3;">Complex queries</p>
-                    </div>
-                </div>
-
-                <div class="fragment" style="margin-top: 0.15em; background: rgba(247, 147, 30, 0.1); padding: 0.25em 0.4em; border-radius: 8px;">
-                    <p style="margin: 0 0 0.15em 0; font-size: 0.7em; font-weight: 600;">💡 Common Combinations</p>
-                    <ul style="margin: 0 0 0 1.2em; line-height: 1.2; font-size: 0.6em;">
-                        <li style="margin: 0.1em 0;"><strong class="highlight-orange">Event Sourcing + CQRS</strong> is the power combo</li>
-                        <li style="margin: 0.1em 0;"><strong class="highlight-blue">Event Notification</strong> works with any pattern</li>
-                        <li style="margin: 0.1em 0;"><strong>Event Bus:</strong> Infrastructure layer enabling all patterns</li>
-                    </ul>
-                </div>
-
-                <aside class="notes">
-                    [13:45-14:15] Show how patterns complement each other. ES + CQRS most powerful. Event Bus is infrastructure. Kode Health uses all 4 together in production.
-                </aside>
-            </section>
-
             <!-- When to Use -->
             <section>
                 <h2>When Should You Use Event Sourcing?</h2>
@@ -1687,8 +1642,8 @@ end
                         </ul>
                     </div>
                 </div>
-                <p class="fragment highlight-blue mt-normal" style="font-style: italic;">
-                    "Use Event Sourcing when you EXPECT to need audit, temporal queries, or event replay" — Fowler
+                <p class="fragment highlight-blue mt-normal" style="font-style: italic; font-size: 0.75em;">
+                    "Event Sourcing is not a natural choice — you need to expect some form of return" — Fowler
                 </p>
                 <aside class="notes">
                     [10:30-11:15] Honest assessment from Fowler's article - when it's valuable, when it's overkill.
@@ -1700,35 +1655,35 @@ end
                 <h2>Who Uses Event Sourcing?</h2>
                 <div class="three-column mt-normal">
                     <div class="fragment">
-                        <h4 class="highlight-blue">Netflix</h4>
-                        <p>Billions of viewing events power your recommendations</p>
+                        <h4 style="color: #e5707d; font-weight: 600;">Netflix</h4>
+                        <p>Downloads feature uses ES with Cassandra - billions of viewing events daily</p>
                     </div>
                     <div class="fragment">
-                        <h4 class="highlight-orange">TikTok</h4>
-                        <p>Every scroll, like, share builds your feed</p>
+                        <h4 style="color: #9B7FBD; font-weight: 600;">Stripe</h4>
+                        <p>Kafka-based general ledger - every transaction in immutable log</p>
                     </div>
                     <div class="fragment">
-                        <h4 class="highlight-green">Uber</h4>
-                        <p>Millions of GPS events per minute</p>
+                        <h4 style="color: #85ab78; font-weight: 600;">GitHub</h4>
+                        <p>Git stores immutable commit history - every change is logged forever</p>
                     </div>
                     <div class="fragment">
-                        <h4 class="highlight-cyan">Stripe</h4>
-                        <p>Financial transactions require perfect audit trail</p>
+                        <h4 style="color: #4db8c4; font-weight: 600;">Your Bank</h4>
+                        <p>Double-entry bookkeeping - 500+ years of proven reliability</p>
                     </div>
                     <div class="fragment">
-                        <h4 class="highlight-blue">GitHub</h4>
-                        <p>Git IS Event Sourcing - every commit is immutable</p>
+                        <h4 style="color: #5b9bd5; font-weight: 600;">Walmart</h4>
+                        <p>Inventory system - billions of products tracked with event sourcing</p>
                     </div>
                     <div class="fragment">
-                        <h4 class="highlight-green">Your Bank</h4>
-                        <p>500+ years of proven reliability</p>
+                        <h4 style="color: #5b9bd5; font-weight: 600;">LinkedIn</h4>
+                        <p>Professional network updates - immutable activity stream</p>
                     </div>
                 </div>
                 <p class="fragment highlight-orange key-message mt-normal">
                     You're already using Event Sourced systems every single day.
                 </p>
                 <aside class="notes">
-                    [12:15-12:45] Real-world 2025 examples - Netflix, TikTok, Stripe, Uber. Services the audience uses daily. Git is always an "aha!" moment - they've been using ES without knowing it!
+                    [14:15-14:30] Real-world verified ES examples. Netflix confirmed at QCon. Stripe uses Kafka as source of truth. Git is the perfect analogy - everyone gets it. Banks invented this 500 years ago. These are proven, production systems.
                 </aside>
             </section>
 
@@ -1740,66 +1695,40 @@ end
                 <p>Several options for Rails developers:</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 0.8em;">
                     <div class="fragment">
-                        <h4 class="highlight-blue">Rails Event Store</h4>
+                        <h4 style="color: #e5707d; font-weight: 600;">Rails Event Store</h4>
                         <p>Production-ready gem by Arkency</p>
                         <p class="small-text">PostgreSQL-based, great docs</p>
                     </div>
                     <div class="fragment">
-                        <h4 class="highlight-cyan">Sequent</h4>
+                        <h4 style="color: #5b9bd5; font-weight: 600;">Sequent</h4>
                         <p>CQRS and Event Sourcing framework</p>
                         <p class="small-text">PostgreSQL, strong opinions</p>
                     </div>
                     <div class="fragment">
-                        <h4 class="highlight-orange">Kafka + Karafka</h4>
-                        <p>Distributed event streaming</p>
-                        <p class="small-text">Heavy-duty, high scale</p>
+                        <h4 style="color: #f0a05c; font-weight: 600;">Kafka + Karafka</h4>
+                        <p>Event streaming backbone</p>
+                        <p class="small-text">Build ES on top of Kafka</p>
                     </div>
                     <div class="fragment">
-                        <h4 class="highlight-green">Roll Your Own</h4>
+                        <h4 style="color: #85ab78; font-weight: 600;">Roll Your Own</h4>
                         <p>PostgreSQL tables + patterns</p>
                         <p class="small-text">Full control, more work</p>
                     </div>
                 </div>
                 <aside class="notes">
-                    [11:45-12:15] Different implementation options. Rails Event Store is the easiest starting point.
-                </aside>
-            </section>
-
-            <!-- Simple PostgreSQL Schema -->
-            <section>
-                <h2>Simple PostgreSQL Event Store</h2>
-                <pre class="code-block"><code class="language-sql" data-trim>
--- Events table (append-only)
-CREATE TABLE events (
-  id UUID PRIMARY KEY,
-  event_type VARCHAR NOT NULL,
-  data JSONB NOT NULL,
-  metadata JSONB,
-  created_at TIMESTAMP NOT NULL
-);
-
--- Streams (logical grouping)
-CREATE TABLE streams (
-  id SERIAL PRIMARY KEY,
-  stream_name VARCHAR NOT NULL UNIQUE,
-  event_id UUID REFERENCES events(id),
-  position INTEGER NOT NULL
-);
-                </code></pre>
-                <p class="fragment mt-normal">That's it! Two tables. Simple, scalable, PostgreSQL-native.</p>
-                <aside class="notes">
-                    [12:15-12:45] Show how simple the database schema can be. Demystify the implementation.
+                    [11:45-12:15] Different implementation options. Rails Event Store is the easiest starting point. Kafka/Karafka is event streaming infrastructure you can build ES on top of.
                 </aside>
             </section>
 
             <!-- Rails Event Store Example -->
             <section>
-                <h3>Rails Event Store Example</h3>
-                <pre class="code-block"><code class="language-ruby" data-trim>
-# Gemfile
+                <h2>Getting Started with Rails Event Store</h2>
+                <p class="supporting-text" style="margin-top: 0.3em;">The most popular option - here's everything you need in three steps</p>
+                <pre class="code-block" style="font-size: 0.45em;"><code class="language-ruby" data-trim>
+# Step 1: Add the gem
 gem 'rails_event_store'
 
-# config/initializers/event_store.rb
+# Step 2: Configure in an initializer
 Rails.configuration.to_prepare do
   Rails.configuration.event_store = RailsEventStore::Client.new
 
@@ -1808,92 +1737,91 @@ Rails.configuration.to_prepare do
   event_store.subscribe(UpdateCartReadModel, to: [ItemAddedToCart])
 end
 
-# Publishing an event
+# Step 3: Publish events
 event_store.publish(ItemAddedToCart.new(data: {
   cart_id: cart.id, product_id: product.id, quantity: 2
 }), stream_name: "Cart-#{cart.id}")
                 </code></pre>
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                    Install gem → Configure → Publish events. Production-ready in under 10 minutes.
+                </p>
                 <aside class="notes">
-                    [12:45-13:30] Practical Rails Event Store code. Show how easy it is to get started.
+                    [12:45-13:30] Rails Event Store is the easiest path. Three simple steps and you're publishing events. Active community, great docs, production-proven.
                 </aside>
             </section>
 
             <!-- Testing -->
             <section>
-                <h2>Testing is Beautiful</h2>
-                <pre class="code-block"><code class="language-ruby" data-trim>
-# Given: Cart with these events
-given_events = [
-  CartCreated.new(data: { cart_id: "abc123" }),
-  ItemAdded.new(data: { cart_id: "abc123", product_id: "xyz" })
-]
+                <h2>One More Thing: Testing is Beautiful</h2>
+                <p class="supporting-text" style="margin-top: 0.3em;">A delightful side effect of Event Sourcing: testing becomes elegant</p>
+                <pre class="code-block" style="font-size: 0.38em;"><code class="language-ruby" data-trim>
+RSpec.describe AddItemToCart do
+  it "publishes ItemAddedToCart event" do
+    # Given: cart was created
+    event_store.publish(
+      CartCreated.new(data: { cart_id: "abc123" }),
+      stream_name: "Cart-abc123"
+    )
 
-# When: I run a command
-result = AddItemToCart.new.handle(command)
+    # When: add item command is executed
+    AddItemToCart.call(
+      event_store: event_store,
+      cart_id: "abc123",
+      product_id: "xyz",
+      quantity: 2
+    )
 
-# Then: I expect this event
-expect(result).to be_success
-expect(result.value).to be_a(ItemAddedToCart)
+    # Then: ItemAddedToCart event was published
+    expect(event_store).to have_published(
+      an_event(ItemAddedToCart).with_data(product_id: "xyz", quantity: 2)
+    )
+  end
+end
                 </code></pre>
-                <p class="fragment mt-normal">
-                    Test <span class="highlight-blue">behavior</span> and <span class="highlight-green">events</span>, not database state.
+                <p class="fragment key-message mt-tight" style="font-size: 0.6em;">
+                    Setup with events, assert with events. Explicit and clean.
                 </p>
                 <aside class="notes">
-                    [13:30-14:00] Testing with events is clean, deterministic, focused on behavior.
+                    [13:30-14:00] Given-When-Then with events. Test commands by publishing setup events, executing the command, asserting new events. Pure logic, no database!
                 </aside>
             </section>
 
-            <!-- SECTION 6: CLOSE (2-3 min) -->
-
-            <!-- Key Takeaways -->
-            <section>
-                <h2>Three Things to Remember</h2>
-                <ol class="mt-loose" style="line-height: 1.7;">
-                    <li class="fragment">
-                        Event Sourcing = Store <span class="highlight-orange">events</span> + derive <span class="highlight-green">state</span>
-                    </li>
-                    <li class="fragment">
-                        Use it when you need <span class="highlight-blue">audit trails</span>, <span class="highlight-blue">temporal queries</span>, or <span class="highlight-blue">event replay</span>
-                    </li>
-                    <li class="fragment">
-                        Rails has great tools — <span class="highlight-green">start small</span>, learn the pattern
-                    </li>
-                </ol>
-                <aside class="notes">
-                    [14:00-14:45] Reinforce the three main learning objectives from the beginning.
-                </aside>
-            </section>
+            <!-- SECTION 6: CLOSE (1 min) -->
 
             <!-- Resources -->
             <section>
-                <h2>Learn More</h2>
-                <ul class="mt-normal">
-                    <li><strong>Martin Fowler:</strong> martinfowler.com/eaaDev/EventSourcing.html</li>
-                    <li><strong>Rails Event Store:</strong> railseventstore.org</li>
-                    <li><strong>Greg Young:</strong> "CQRS and Event Sourcing" talks on YouTube</li>
-                    <li><strong>Vaughn Vernon:</strong> "Implementing Domain-Driven Design"</li>
-                    <li><strong>EventStoreDB:</strong> eventstore.com (if you need dedicated event store)</li>
+                <h2>Get Started</h2>
+                <ul style="font-size: 1em; line-height: 2.2; list-style: none; text-align: center; margin-top: 1.5em;">
+                    <li><strong style="color: var(--color-cyan);">Rails Event Store:</strong> railseventstore.org</li>
+                    <li style="margin-top: 1em;"><strong style="color: var(--color-orange);">Martin Fowler:</strong> martinfowler.com/eaaDev/EventSourcing.html</li>
+                    <li style="margin-top: 1em;"><strong style="color: var(--color-green);">Greg Young:</strong> "CQRS and Event Sourcing" on YouTube</li>
                 </ul>
-                <p class="supporting-text mt-loose">
-                    Slides available in the meetup channel
-                </p>
                 <aside class="notes">
-                    [15:30-16:00] Resources for continued learning. Point to the best materials.
+                    [14:00-14:15] Quick resources slide. Don't dwell here, move to Q&A.
                 </aside>
             </section>
 
-            <!-- Thank You -->
+            <!-- Questions + Contact -->
             <section data-transition="zoom">
                 <h1>Questions?</h1>
-                <p class="key-message mt-loose">
-                    Let's learn together.
-                </p>
-                <p class="mt-loose">
-                    Chris Miles<br>
-                    <span class="small-text">chris@kodehealth.com</span>
-                </p>
+
+                <div style="margin-top: 1.2em;">
+                    <p style="font-size: 1em; margin-bottom: 1.2em; margin-top: 0;">
+                        <strong>Chris Miles</strong>
+                    </p>
+                    <p style="font-size: 0.8em; line-height: 2; color: var(--text-secondary);">
+                        <span style="color: var(--color-cyan);">Email:</span> cw.miles121@gmail.com
+                    </p>
+                    <p style="font-size: 0.8em; line-height: 2; color: var(--text-secondary);">
+                        <span style="color: var(--color-orange);">LinkedIn:</span> linkedin.com/in/c-miles/
+                    </p>
+                    <p style="font-size: 0.8em; line-height: 2; color: var(--text-secondary);">
+                        <span style="color: var(--color-green);">Slides:</span> github.com/c-miles/event-sourcing-presentation
+                    </p>
+                </div>
+
                 <aside class="notes">
-                    [16:00-18:00] Open for Q&A. Stay humble - "I'm still learning too, so let's figure this out together."
+                    [14:15-18:00] Open for Q&A. Contact info stays visible. Emphasize you're learning too.
                 </aside>
             </section>
 
