@@ -35,7 +35,7 @@
             --color-blue: #5b9bd5;        /* Info - Good contrast (7.2:1) */
             --color-cyan: #4db8c4;        /* Accent - Desaturated from #44bec7 */
             --color-orange: #f0a05c;      /* Warning - Desaturated from #ed7d31 */
-            --color-green: #82c466;       /* Success - Desaturated from #70ad47 */
+            --color-green: #85ab78;       /* Success - Muted, desaturated green */
             --color-purple: #9B7FBD;      /* Aggregate - Desaturated purple for dark bg */
             --color-red: #e5707d;         /* Error - Desaturated */
 
@@ -381,15 +381,16 @@
         }
 
         .pattern__description {
-            font-size: 0.95em;
+            font-size: 0.9em;
             font-weight: 600;
             line-height: 1.5;
+            margin-bottom: 0.2em;
         }
 
         .pattern__detail {
-            font-size: 0.8em;
-            line-height: 1.6;
-            margin-top: var(--space-tight);
+            font-size: 0.75em;
+            line-height: 1.5;
+            margin-top: 0.2em;
         }
 
         .pattern__benefits,
@@ -400,35 +401,62 @@
 
         .pattern__benefits h4 {
             color: var(--color-green);
-            margin: 0 0 0.1em 0;  /* Tighter space below header */
-            font-size: 0.8em;  /* Reduced for compact display */
+            margin: 0 0 0.15em 0;
+            font-size: 0.78em;
             font-weight: 600;
         }
 
         .pattern__pitfalls h4,
         .pattern__tradeoffs h4 {
             color: var(--color-orange);
-            margin: 0 0 0.1em 0;  /* Tighter space below header */
-            font-size: 0.8em;  /* Reduced for compact display */
+            margin: 0 0 0.15em 0;
+            font-size: 0.78em;
             font-weight: 600;
         }
 
         .pattern__list {
             margin: 0;
-            line-height: 1.3;  /* Tighter line height */
-            font-size: 0.75em;  /* Reduced further for more compact display */
+            line-height: 1.3;
+            font-size: 0.72em;
         }
 
         .pattern__list li {
-            margin: 0.15em 0;  /* Tighter spacing between items */
+            margin: 0.15em 0;
         }
 
         .pattern__examples {
-            margin-top: 0.3em;  /* Minimal top spacing */
-            font-size: 0.6em;  /* Even smaller examples text */
+            margin-top: 0.25em;
+            font-size: 0.58em;
             color: var(--text-secondary);
             font-style: italic;
-            line-height: 1.2;  /* Tighter line height */
+            line-height: 1.3;
+        }
+
+        /* Superpower variants - slightly smaller for dense content */
+        .pattern--superpower .pattern__description {
+            font-size: 0.85em;
+        }
+
+        .pattern--superpower .pattern__detail {
+            font-size: 0.7em;
+        }
+
+        .pattern--superpower .pattern__benefits h4,
+        .pattern--superpower .pattern__tradeoffs h4 {
+            font-size: 0.75em;
+        }
+
+        .pattern--superpower .pattern__list {
+            font-size: 0.68em;
+            line-height: 1.25;
+        }
+
+        .pattern--superpower .pattern__list li {
+            margin: 0.1em 0;
+        }
+
+        .pattern--superpower .pattern__examples {
+            font-size: 0.55em;
         }
 
         /* Content Section Component (for Problem/Solution layouts) */
@@ -721,7 +749,7 @@ order.update!(status: 'shipped')
                     <p class="pattern__detail fragment">
                         Source system sends notification, doesn't expect response
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.4em;">
+                    <div class="two-column fragment" style="margin-top: 0.3em;">
                         <div class="pattern__benefits">
                             <h4>Benefits</h4>
                             <ul class="pattern__list">
@@ -782,7 +810,7 @@ end
                     <p class="pattern__detail fragment">
                         Consumers maintain local copies, no back-queries needed
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.4em;">
+                    <div class="two-column fragment" style="margin-top: 0.3em;">
                         <div class="pattern__benefits">
                             <h4>Benefits</h4>
                             <ul class="pattern__list">
@@ -871,7 +899,7 @@ end
                             </ul>
                         </div>
                     </div>
-                    <div class="two-column fragment" style="margin-top: 0.4em;">
+                    <div class="two-column fragment" style="margin-top: 0.3em;">
                         <div class="pattern__benefits">
                             <h4>Benefits</h4>
                             <ul class="pattern__list">
@@ -939,7 +967,7 @@ end
                     <p class="pattern__detail fragment">
                         Current state computed by replaying event history
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.4em;">
+                    <div class="two-column fragment" style="margin-top: 0.3em;">
                         <div class="pattern__benefits">
                             <h4>Benefits</h4>
                             <ul class="pattern__list">
@@ -957,7 +985,7 @@ end
                         </div>
                     </div>
                     <p class="pattern__examples fragment">
-                        <strong>e.g.</strong> Shopping cart: ItemAdded, ItemRemoved, CheckoutCompleted → can prove customer removed headphones at 2:15 PM
+                        <strong>e.g.</strong> Shopping cart: ItemAdded, ItemRemoved, CheckoutCompleted → complete history of every action
                     </p>
                 </div>
                 <aside class="notes">
@@ -991,7 +1019,7 @@ Date         Transaction            Amount      Balance
                     <p class="fragment" style="margin-top: 0.3em;">
                         Since 1494 (Luca Pacioli's <em>Summa de Arithmetica</em>), accountants have used <strong>double-entry bookkeeping</strong>: never erase ledger entries, only add corrections.
                     </p>
-                    <p class="fragment highlight-green key-message" style="margin-top: 0.3em;">
+                    <p class="fragment key-message" style="margin-top: 0.3em; color: #85ab78;">
                         This pattern has been battle-tested for <strong>500+ years</strong> in banking.
                     </p>
                 </div>
@@ -1143,26 +1171,51 @@ Stream: "cart-123"
             <!-- The Superpowers: Intro -->
             <section>
                 <h2>Event Sourcing Superpowers</h2>
-                <p class="mt-normal">Why would you use Event Sourcing?</p>
-                <p class="fragment key-message mt-normal">
-                    Because it unlocks capabilities impossible with traditional CRUD.
+                <p class="supporting-text" style="margin-top: 0.5em;">We've learned WHAT Event Sourcing is. Now let's see WHY it matters.</p>
+
+                <p class="fragment key-message highlight-orange" style="margin-top: 1.5em;">
+                    Remember that shopping cart dispute?
                 </p>
-                <p class="fragment mt-normal">
-                    Let's look at four game-changing superpowers...
+                <p class="fragment key-message" style="margin-top: 0.8em;">
+                    Event Sourcing solves it—and unlocks three more superpowers.
                 </p>
                 <aside class="notes">
-                    [9:30-9:45] Set up the "why" - these superpowers are the value proposition of Event Sourcing.
+                    [9:30-9:45] PIVOT POINT: Transition from mechanics to value. Reference the opening hook to create anticipation. Superpower #1 will resolve the dispute and deliver the narrative payoff.
                 </aside>
             </section>
 
             <!-- Superpower #1: Time Travel -->
             <section>
                 <h2>Superpower #1: Time Travel Queries</h2>
-                <div class="slide-content">
-                    <p class="fragment key-message">
-                        Remember our shopping cart dispute? <span class="highlight-orange">"What was in the cart at 2:16 PM?"</span>
+                <div class="pattern pattern--superpower">
+                    <p class="pattern__description fragment">
+                        Determine application state <span class="highlight-orange">at any point in history</span>
                     </p>
-                    <pre class="fragment mt-tight code-block"><code class="language-ruby" data-trim>
+                    <p class="pattern__detail fragment">
+                        Replay events from the beginning up to a specific timestamp
+                    </p>
+                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                        <div class="pattern__benefits">
+                            <h4>Use Cases</h4>
+                            <ul class="pattern__list">
+                                <li>Resolve customer disputes with evidence</li>
+                                <li>Debug production issues by replaying sessions</li>
+                                <li>Compliance (GDPR): prove what data existed when</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>Examples</h4>
+                            <ul class="pattern__list">
+                                <li>Shopping cart: "What was in cart at 2:16 PM?"</li>
+                                <li>Medical records: "What did chart show on Jan 15?"</li>
+                                <li>Support: "Show me what customer saw"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;">
+                        <strong>Remember our opening:</strong> Customer claims headphones were removed.
+                    </p>
+                    <pre class="fragment code-block" style="margin-top: 0.2em; font-size: 0.42em;"><code class="language-ruby" data-trim>
 # Query state at ANY point in time
 cart.as_of(Time.parse("2025-11-19 14:16:00"))
 # => { items: ["laptop_case"] }  # Headphones WERE removed!
@@ -1170,108 +1223,28 @@ cart.as_of(Time.parse("2025-11-19 14:16:00"))
 cart.as_of(Time.parse("2025-11-19 14:21:00"))
 # => { items: ["laptop_case", "headphones"] }  # Then added back!
                     </code></pre>
-                    <p class="fragment key-message highlight-green mt-tight">
-                        Dispute resolved! The complete history is preserved forever.
-                    </p>
-                    <p class="fragment mt-tight">
-                        This is impossible with CRUD - you can't recreate deleted/overwritten data.
+                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.2em; color: #85ab78;">
+                        Dispute resolved! Customer removed them at 2:16 PM, then accidentally re-added at 2:21 PM.
                     </p>
                 </div>
                 <aside class="notes">
-                    [9:45-10:15] SUPERPOWER #1: Callback to opening hook. Show how temporal queries solve real problems. This creates the "aha!" moment.
+                    [9:45-10:15] NARRATIVE PAYOFF: This resolves our opening hook with PROOF. Show the actual as_of() query revealing what happened. Customer was telling the truth - they DID remove the headphones, then changed their mind. This is impossible with CRUD. The code proves it.
                 </aside>
             </section>
 
-            <!-- Superpower #2: Perfect Audit Trail -->
+            <!-- Superpower #1: Implementation -->
             <section>
-                <h2>Superpower #2: Perfect Audit Trail</h2>
-                <div class="slide-content">
-                    <p class="fragment key-message">
-                        Every change is recorded: <strong>what, who, when, why</strong> — forever.
-                    </p>
-                    <pre class="fragment mt-tight code-block"><code class="language-ruby" data-trim>
-Events::PatientDataUpdated
-  user_id: "dr_smith_123"
-  field: "medication"
-  old_value: "None"
-  new_value: "Aspirin 81mg"
-  timestamp: "2025-11-19 14:22:00"
-  reason: "New prescription"
-                    </code></pre>
-                    <p class="fragment key-message highlight-green mt-tight">
-                        HIPAA compliance? ✓ SOC 2 audit? ✓ Forensic investigation? ✓
-                    </p>
-                    <p class="fragment mt-tight">
-                        The audit log isn't an afterthought — it's the source of truth.
-                    </p>
-                </div>
-                <aside class="notes">
-                    [10:15-10:45] SUPERPOWER #2: Healthcare/compliance example. Show how audit trail is built-in, not bolted-on.
-                </aside>
-            </section>
-
-            <!-- Superpower #3: Debug by Replay -->
-            <section>
-                <h2>Superpower #3: Debug by Replay</h2>
-                <div class="slide-content">
-                    <p class="fragment key-message">
-                        Production bug? <span class="highlight-orange">Replay the exact event sequence</span> in development.
-                    </p>
-                    <pre class="fragment mt-tight code-block"><code class="language-ruby" data-trim>
-# Export events from production
-events = EventStore.read_stream("Order-12345")
-
-# Replay in development
-events.each { |event| apply_event(event) }
-
-# Now debug with the EXACT state that caused the bug
-                    </code></pre>
-                    <p class="fragment key-message mt-tight">
-                        No more "works on my machine" — you have the exact reproduction steps.
-                    </p>
-                    <p class="fragment mt-tight">
-                        Fix bugs with confidence, knowing you can verify the fix against real data.
-                    </p>
-                </div>
-                <aside class="notes">
-                    [10:45-11:15] SUPERPOWER #3: Debugging use case. Show how event replay makes production bugs reproducible.
-                </aside>
-            </section>
-
-            <!-- Superpower #4: Event-Driven Scale -->
-            <section>
-                <h2>Superpower #4: Event-Driven Architecture</h2>
-                <div class="slide-content">
-                    <p class="fragment key-message">
-                        Events enable <span class="highlight-cyan">loosely-coupled, horizontally scalable</span> systems.
-                    </p>
-                    <p class="fragment mt-normal">
-                        Each service subscribes to relevant events. Process millions of events per second across independent workers.
-                    </p>
-                    <p class="fragment key-message highlight-green mt-tight">
-                        Multiple read models, each optimized for its use case. Scale reads independently.
-                    </p>
-                </div>
-                <aside class="notes">
-                    [11:15-11:45] SUPERPOWER #4: Scale and real-world examples. Show that ES powers systems we use daily.
-                </aside>
-            </section>
-
-            <!-- ES Implementation Details -->
-
-            <!-- Temporal Queries - How They Work -->
-            <section>
-                <h2>Temporal Queries: How They Work</h2>
-                <p>Query state at <strong>any point in time</strong></p>
-                <pre class="mt-tight code-block"><code class="language-ruby" data-trim data-line-numbers>
+                <h2>Time Travel Queries: How It Works</h2>
+                <p class="supporting-text" style="margin-top: 0.3em;">The mechanism behind resolving that dispute</p>
+                <pre class="mt-tight code-block" style="font-size: 0.5em;"><code class="language-ruby" data-trim data-line-numbers>
 class CartRepository
-  def as_of(cart_id, timestamp)
-    # 1. Read events for this cart
+  def as_of(timestamp, cart_id)
+    # 1. Read ALL events for this cart
     events = EventStore
       .read_stream("cart-#{cart_id}")
       .select { |event| event.created_at <= timestamp }
 
-    # 2. Replay events to rebuild state
+    # 2. Replay filtered events to rebuild state
     replay_events(events)
   end
 
@@ -1284,57 +1257,222 @@ class CartRepository
   end
 end
 
-# Usage
-cart = CartRepository.as_of(123, Time.parse("2025-11-19 14:30"))
-cart.items # => State at 2:30 PM
+# Usage: Query state at 2:16 PM
+cart = CartRepository.as_of(Time.parse("2025-11-19 14:16:00"), 123)
+cart.items # => ["laptop_case"] - Headphones were removed!
                 </code></pre>
                 <p class="fragment key-message mt-tight">
-                    Filter events by time, replay → <strong>time travel</strong>
+                    Filter events by timestamp, replay them → recreate any moment in history
                 </p>
                 <aside class="notes">
-                    [11:45-12:15] Show HOW temporal queries work. Filter events before timestamp, replay them. This is how we resolve disputes.
+                    [10:15-10:45] Show HOW temporal queries work: filter events before timestamp, replay to rebuild state. This is the technical mechanism behind the dispute resolution. Developers understand it's not magic - it's elegant engineering.
                 </aside>
             </section>
 
-            <!-- Event Replay - Rebuilding State -->
+            <!-- Superpower #2: Perfect Audit Trail -->
             <section>
-                <h2>Event Replay: Rebuilding State</h2>
-                <p>State is <strong>derived</strong> from events, not stored</p>
-                <pre class="mt-tight code-block--small"><code class="language-ruby" data-trim data-line-numbers>
-class Cart
-  attr_reader :items, :total
+                <h2>Superpower #2: Perfect Audit Trail</h2>
+                <div class="pattern pattern--superpower">
+                    <p class="pattern__description fragment">
+                        Every change recorded forever: <span class="highlight-orange">what, who, when, why</span>
+                    </p>
+                    <p class="pattern__detail fragment">
+                        Immutable, tamper-proof history — built into the architecture, not bolted on
+                    </p>
+                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                        <div class="pattern__benefits">
+                            <h4 style="color: var(--color-cyan);">Traditional Audit (PaperTrail/Audited)</h4>
+                            <ul class="pattern__list">
+                                <li>Bolted-on: tracks state changes separately</li>
+                                <li>Can bypass: update_column skips callbacks</li>
+                                <li>Can tamper: audit records can be deleted</li>
+                                <li>Not atomic: audit insert can fail</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>Event Sourcing</h4>
+                            <ul class="pattern__list">
+                                <li>Built-in: events ARE the source of truth</li>
+                                <li>Cannot bypass: must create event to change state</li>
+                                <li>Immutable: append-only, can't delete/modify</li>
+                                <li>Atomic: event is the change</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.3em; color: #85ab78;">
+                        HIPAA compliance? ✓ SOC 2 audit? ✓ Forensic investigation? ✓
+                    </p>
+                </div>
+                <aside class="notes">
+                    [10:45-11:00] SUPERPOWER #2: Explain why ES audit trail is "perfect" - it's not an afterthought like PaperTrail/Audited that can be bypassed. Events ARE the source of truth, immutable and tamper-proof.
+                </aside>
+            </section>
 
-  def initialize
-    @items = []
-    @total = 0
-  end
+            <!-- Superpower #2: Implementation -->
+            <section>
+                <h2>Perfect Audit Trail: How It Works</h2>
+                <p class="supporting-text" style="margin-top: 0.3em;">Complete history of WHO changed WHAT and WHY</p>
+                <pre class="mt-tight code-block" style="font-size: 0.38em;"><code class="language-ruby" data-trim>
+# Event stream shows complete audit trail
+events = EventStore.read_stream("patient-789")
 
-  def apply(event)
-    case event
-    when Events::ItemAdded
-      add_item(event.data)
-    when Events::ItemRemoved
-      remove_item(event.data)
-    when Events::CheckoutCompleted
-      complete_checkout(event.data)
-    end
-    self
-  end
+# Event 1: Nov 19, 9:15 AM - Initial visit
+Events::MedicationPrescribed
+  user_id: "dr_smith_123"
+  medication: "Penicillin VK 500mg"
+  reason: "Strep throat infection, 10-day course"
 
-  private
+# Event 2: Nov 20, 2:30 PM - Follow-up visit
+Events::MedicationDiscontinued
+  user_id: "dr_jones_456"
+  medication: "Penicillin VK 500mg"
+  reason: "Patient developed rash and hives, allergic reaction"
 
-  def add_item(data)
-    @items << { product_id: data[:product_id], quantity: data[:quantity] }
-    @total += data[:price] * data[:quantity]
-  end
+# Event 3: Nov 20, 2:45 PM - Same visit
+Events::MedicationPrescribed
+  user_id: "dr_jones_456"
+  medication: "Azithromycin 250mg Z-pack"
+  reason: "Alternative antibiotic after penicillin allergy confirmed"
+                </code></pre>
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                    Malpractice lawsuit? Complete, immutable record of when allergy was discovered and documented.
+                </p>
+                <aside class="notes">
+                    [11:00-11:15] Show the TRAIL - sequence of events over time. This is what makes it "perfect" - complete, immutable history showing who did what and why. Healthcare example resonates with Chris's background.
+                </aside>
+            </section>
+
+            <!-- Superpower #3: Debug by Replay -->
+            <section>
+                <h2>Superpower #3: Debug by Replay</h2>
+                <div class="pattern pattern--superpower">
+                    <p class="pattern__description fragment">
+                        Reproduce production bugs <span class="highlight-orange">deterministically</span> in development
+                    </p>
+                    <p class="pattern__detail fragment">
+                        Export exact event sequence from production, replay locally with debugger
+                    </p>
+                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                        <div class="pattern__benefits">
+                            <h4 style="color: var(--color-cyan);">Traditional Debugging</h4>
+                            <ul class="pattern__list">
+                                <li>Incomplete logs: missing user actions</li>
+                                <li>Can't reproduce exact production state</li>
+                                <li>"Works on my machine" syndrome</li>
+                                <li>Guesswork: try to reverse-engineer steps</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>Event Replay</h4>
+                            <ul class="pattern__list">
+                                <li>Complete sequence: every action recorded</li>
+                                <li>Exact reproduction: same events = same state</li>
+                                <li>Deterministic: replay always produces bug</li>
+                                <li>Certainty: see precisely where it breaks</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;">
+                        <strong>Scenario:</strong> Customer charged twice, but checkout shows "failed"
+                    </p>
+                </div>
+                <aside class="notes">
+                    [11:15-11:30] SUPERPOWER #3: Explain deterministic debugging - traditional debugging relies on incomplete logs and guesswork. Event replay gives you exact reproduction.
+                </aside>
+            </section>
+
+            <!-- Superpower #3: Implementation -->
+            <section>
+                <h2>Debug by Replay: How It Works</h2>
+                <p class="supporting-text" style="margin-top: 0.3em;">Export production events, replay locally, fix with confidence</p>
+                <pre class="mt-tight code-block" style="font-size: 0.55em;"><code class="language-ruby" data-trim data-line-numbers>
+# 1. Export events from production order that failed
+production_events = EventStore.read_stream("order-12345")
+# => [ItemAdded, ItemAdded, CheckoutStarted, PaymentProcessed,
+#     PaymentProcessed, CheckoutFailed]  # 🚨 Payment processed TWICE!
+
+# 2. Replay in local dev environment with debugger
+order = Order.new
+production_events.each do |event|
+  debugger if event.is_a?(Events::PaymentProcessed)  # Set breakpoint
+  order.apply(event)
 end
 
-# Replay to get current state
-events = EventStore.read_stream("cart-123")
-cart = events.reduce(Cart.new) { |c, event| c.apply(event) }
+# 3. Bug revealed: Race condition in payment retry logic
+# Network timeout → retry → double charge
+# Fix: Add idempotency key to payment handler
+
+# 4. Deploy fix with confidence - bug can't resurface
                 </code></pre>
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                    From "can't reproduce" to "found and fixed in 20 minutes"
+                </p>
                 <aside class="notes">
-                    [12:15-12:45] Show the apply pattern. Each event type knows how to update state. Fold/reduce over events to rebuild.
+                    [11:30-11:45] Show concrete debugging workflow: export from production, replay with debugger, find race condition, fix. This is the power - deterministic reproduction of non-deterministic bugs.
+                </aside>
+            </section>
+
+            <!-- Superpower #4: Event-Driven Architecture -->
+            <section>
+                <h2>Superpower #4: Event-Driven Architecture</h2>
+                <div class="pattern pattern--superpower">
+                    <p class="pattern__description fragment">
+                        Build <span class="highlight-cyan">loosely-coupled, independently scalable</span> systems
+                    </p>
+                    <p class="pattern__detail fragment">
+                        Services react to events asynchronously — no direct calls, no cascading failures
+                    </p>
+                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                        <div class="pattern__benefits">
+                            <h4 style="color: var(--color-cyan);">Traditional (Synchronous)</h4>
+                            <ul class="pattern__list">
+                                <li>Tight coupling: direct service-to-service calls</li>
+                                <li>Cascading failures: one slow API blocks all</li>
+                                <li>Modify existing code: add new integration points</li>
+                                <li>Deploy together: coordinated releases</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>Event-Driven (Async)</h4>
+                            <ul class="pattern__list">
+                                <li>Loose coupling: publish events, no direct calls</li>
+                                <li>Resilient: services fail independently</li>
+                                <li>Open/Closed: add features without changing code</li>
+                                <li>Deploy independently: no coordination needed</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;">
+                        <strong>Scenario:</strong> Business wants fraud detection on all orders
+                    </p>
+                </div>
+                <aside class="notes">
+                    [11:45-12:00] SUPERPOWER #4: Architectural advantage - traditional synchronous service calls create tight coupling and cascading failures. Event-driven systems let services operate independently.
+                </aside>
+            </section>
+
+            <!-- Superpower #4: Implementation -->
+            <section>
+                <h2>Event-Driven Architecture: How It Works</h2>
+                <p class="supporting-text" style="margin-top: 0.3em;">One event, multiple independent reactions — add features without modifying existing code</p>
+                <pre class="mt-tight code-block" style="font-size: 0.5em;"><code class="language-ruby" data-trim>
+# One event published
+Events::OrderPlaced.new(order_id: 123, total: 115)
+
+# Multiple services subscribe independently:
+InventoryService.on(OrderPlaced) { |e| reserve_items(e.order_id) }
+EmailService.on(OrderPlaced)     { |e| send_confirmation(e.order_id) }
+AnalyticsService.on(OrderPlaced) { |e| track_revenue(e.total) }
+ShippingService.on(OrderPlaced)  { |e| create_label(e.order_id) }
+
+# Want fraud detection? Just add a subscriber - no changes to OrderService!
+FraudService.on(OrderPlaced)     { |e| check_for_fraud(e.order_id) }
+                </code></pre>
+                <p class="fragment key-message mt-tight" style="font-size: 0.62em;">
+                    Deploy FraudService independently. If EmailService is down, others keep working. This is how modern systems scale.
+                </p>
+                <aside class="notes">
+                    [12:00-12:15] Show pub/sub pattern: one event, multiple subscribers. Key insight: Add FraudService by subscribing to existing event - zero changes to OrderService. Services fail independently - EmailService down doesn't affect inventory or shipping. Open/Closed Principle in action.
                 </aside>
             </section>
 
