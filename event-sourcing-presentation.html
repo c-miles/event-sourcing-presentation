@@ -1476,81 +1476,142 @@ FraudService.on(OrderPlaced)     { |e| check_for_fraud(e.order_id) }
                 </aside>
             </section>
 
-            <!-- The External Systems Challenge -->
+            <!-- Challenge #1: External Systems -->
             <section>
-                <h2>The External Systems Challenge</h2>
-                <div class="content-section">
-                    <p class="fragment" style="margin: 0 0 0.3em 0; font-size: 0.9em;">
+                <h2>Challenge #1: External Systems</h2>
+                <div class="pattern pattern--superpower">
+                    <p class="pattern__description fragment">
                         <span class="highlight-orange">Fowler's biggest warning:</span> You can't "undo" external actions
                     </p>
-                    <div class="fragment" style="margin-top: 0.3em;">
-                        <h4>The Problem</h4>
-                        <ul style="margin: 0; line-height: 1.5; font-size: 0.75em;">
-                            <li style="margin: 0.2em 0;">Can't "unsend" an email</li>
-                            <li style="margin: 0.2em 0;">Can't "uncharge" a credit card</li>
-                            <li style="margin: 0.2em 0;">Can't undo API calls to 3rd parties</li>
-                        </ul>
+                    <p class="pattern__detail fragment">
+                        Event replay assumes pure functions — external side effects break that assumption
+                    </p>
+                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                        <div class="pattern__benefits">
+                            <h4 style="color: var(--color-cyan);">The Problem</h4>
+                            <ul class="pattern__list">
+                                <li>Can't "unsend" an email</li>
+                                <li>Can't "uncharge" a credit card</li>
+                                <li>Can't undo API calls to 3rd parties</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>The Solution</h4>
+                            <ul class="pattern__list">
+                                <li>Gateway pattern with idempotency keys</li>
+                                <li>Track what external actions were taken</li>
+                                <li>Check before performing action again</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="fragment" style="margin-top: 0.3em;">
-                        <h4>The Solution</h4>
-                        <ul style="margin: 0; line-height: 1.5; font-size: 0.75em;">
-                            <li style="margin: 0.2em 0;">Gateway pattern with idempotency keys</li>
-                            <li style="margin: 0.2em 0;">Track what external actions were taken</li>
-                            <li style="margin: 0.2em 0;">Check before performing action again</li>
-                        </ul>
-                    </div>
-                    <p class="fragment" style="margin: 0.3em 0 0 0; font-size: 0.85em;">
+                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.3em; color: #85ab78;">
                         This is why ES requires <strong>careful integration design</strong>
                     </p>
                 </div>
                 <aside class="notes">
-                    [12:45-13:15] Fowler emphasizes this heavily. ES replay assumes pure functions. External systems break that assumption. Must handle carefully.
+                    [12:15-12:30] Fowler emphasizes this heavily. ES replay assumes pure functions. External systems break that assumption. Must handle carefully with gateway pattern and idempotency.
                 </aside>
             </section>
 
             <!-- Gateway Pattern for External Systems -->
             <section>
                 <h2>Gateway Pattern: Idempotent Actions</h2>
-                <p>Track what was sent, don't resend on replay</p>
-                <pre class="mt-tight code-block--small"><code class="language-ruby" data-trim data-line-numbers>
+                <p class="supporting-text" style="margin-top: 0.3em;">Track what was sent, don't resend on replay</p>
+                <pre class="mt-tight code-block" style="font-size: 0.48em;"><code class="language-ruby" data-trim data-line-numbers>
 class EmailGateway
   def send_order_confirmation(event)
-    # Check if already sent
-    return if already_sent?(event.id)
+    # Check if already sent - idempotency guard
+    return if SentEmails.exists?(event_id: event.id)
 
-    begin
-      EmailService.send(
-        to: event.data[:email],
-        subject: "Order Confirmation",
-        body: email_body(event.data)
-      )
-
-      track_as_sent(event.id)
-    rescue => e
-      log_error(event.id, e)
-      raise
-    end
-  end
-
-  private
-
-  def already_sent?(event_id)
-    SentEmails.exists?(event_id: event_id)
-  end
-
-  def track_as_sent(event_id)
-    SentEmails.create!(
-      event_id: event_id,
-      sent_at: Time.current,
-      idempotency_key: event_id
+    # Send email to external service
+    EmailService.send(
+      to: event.data[:email],
+      subject: "Order Confirmation",
+      body: email_body(event.data)
     )
+
+    # Track that we sent it
+    SentEmails.create!(event_id: event.id, sent_at: Time.current)
   end
 end
 
-# On replay, emails won't be resent because already_sent? returns true
+# On replay, emails won't be resent because guard returns early
                 </code></pre>
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                    Event ID as idempotency key — essential for production ES systems
+                </p>
                 <aside class="notes">
-                    [13:15-13:45] Gateway checks tracking table. If already sent, skip. Event ID as idempotency key. Essential for production ES systems.
+                    [12:30-12:45] Gateway checks tracking table. If already sent, skip. Event ID as idempotency key. Essential for production ES systems to prevent duplicate external actions during replay.
+                </aside>
+            </section>
+
+            <!-- Challenge #2: Code Evolution / Schema Evolution -->
+            <section>
+                <h2>Challenge #2: Code Evolution / Schema Evolution</h2>
+                <div class="pattern pattern--superpower">
+                    <p class="pattern__description fragment">
+                        Events are <span class="highlight-orange">immutable history</span> — code must evolve while handling old formats
+                    </p>
+                    <p class="pattern__detail fragment">
+                        New business logic, bug fixes, and temporal rules require backward compatibility
+                    </p>
+                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                        <div class="pattern__benefits">
+                            <h4 style="color: var(--color-cyan);">Traditional CRUD</h4>
+                            <ul class="pattern__list">
+                                <li>Schema migrations: update all data at once</li>
+                                <li>Forward-only: new code, new behavior</li>
+                                <li>Bug fix: apply to all data, history updated</li>
+                            </ul>
+                        </div>
+                        <div class="pattern__tradeoffs">
+                            <h4>Event Sourcing</h4>
+                            <ul class="pattern__list">
+                                <li>Backward compatibility: handle v1, v2, v3 events</li>
+                                <li>Bi-temporal: when happened vs when understood</li>
+                                <li>Bug fix: history immutable, can't change past</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;">
+                        <strong>Scenario:</strong> Bug in discount calculation from 6 months ago — fix code but can't change history
+                    </p>
+                </div>
+                <aside class="notes">
+                    [13:45-14:00] CHALLENGE #2: Fowler calls this "very messy." Events are immutable, so code must handle multiple event versions simultaneously. Bug fixes with temporal implications become bi-temporal: when event happened vs when we understood what it meant.
+                </aside>
+            </section>
+
+            <!-- Challenge #2: Schema Evolution Strategies -->
+            <section>
+                <h2>Schema Evolution: How to Handle It</h2>
+                <p class="supporting-text" style="margin-top: 0.3em;">Three strategies for handling event format changes</p>
+                <pre class="mt-tight code-block" style="font-size: 0.36em;"><code class="language-ruby" data-trim>
+# Strategy 1: Upcasting - transform old events to new format on read
+def upcast_order_placed(event_data)
+  return event_data if event_data[:version] == 2
+  { version: 2, subtotal: event_data[:price], tax: 0 }  # v1 → v2
+end
+
+# Strategy 2: Versioned handlers - code handles all versions explicitly
+def apply(event)
+  case event
+  when Events::OrderPlaced::V1 then apply_v1(event)
+  when Events::OrderPlaced::V2 then apply_v2(event)
+  end
+end
+
+# Strategy 3: Weak schema - tolerant readers accept multiple formats
+def apply_order_placed(event)
+  @subtotal = event[:subtotal] || event[:price] || 0
+  @tax = event[:tax] || 0
+end
+                </code></pre>
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                    Upcasting most common — transforms on read without mutating immutable history
+                </p>
+                <aside class="notes">
+                    [14:00-14:15] Three proven strategies from ES community. Upcasting transforms old events to new format on-the-fly during reads. Versioned handlers let code process all versions explicitly. Weak schema uses tolerant readers with defaults. Greg Young's book "Versioning in an Event Sourced System" is the definitive resource.
                 </aside>
             </section>
 
