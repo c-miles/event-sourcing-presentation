@@ -1102,52 +1102,25 @@ Date         Transaction            Amount      Balance
                 </aside>
             </section>
 
-            <!-- Code Example: Shopping Cart Tracking -->
-            <section>
-                <h3>Code Example: Shopping Cart Tracking</h3>
-                <p class="supporting-text compact-text">All events stored forever, enabling time travel</p>
-                <pre class="mt-extra-tight code-block--large"><code class="language-ruby" data-trim data-line-numbers>
-# Events stored forever (immutable facts)
-Events::ItemAdded.new(product: "laptop_case", price: 35, at: "14:10:00")
-Events::ItemAdded.new(product: "headphones", price: 80, at: "14:12:00")
-Events::ItemRemoved.new(product: "headphones", at: "14:15:00")
-Events::ItemAdded.new(product: "headphones", price: 80, at: "14:20:00")
-Events::CheckoutCompleted.new(total: 115, at: "14:23:00")
-
-# Query state at ANY point in time
-cart.as_of(Time.parse("2025-11-19 14:16:00"))
-# => { items: ["laptop_case"] }  # Headphones WERE removed!
-
-cart.as_of(Time.parse("2025-11-19 14:21:00"))
-# => { items: ["laptop_case", "headphones"] }  # Then added back!
-                </code></pre>
-                <p class="fragment key-message mt-tight">
-                    Dispute resolved! Customer DID remove them, but accidentally re-added.
-                </p>
-                <aside class="notes">
-                    [7:15-8:15] SHOPPING CART EXAMPLE: Ties back to our opening hook! Show how Event Sourcing solves the dispute problem. Events show customer removed headphones at 2:15 PM, but then re-added at 2:20 PM (accidental click?). This is the power of temporal queries - we can recreate any moment in time and resolve disputes with evidence.
-                </aside>
-            </section>
-
             <!-- Event Store & Streams - Foundation -->
             <section>
                 <h2>The Event Store & Streams</h2>
-                <p class="supporting-text">Before we go further, let's understand where events live</p>
+                <p class="supporting-text" style="margin: 0.2em auto;">Now that you understand the flow, let's see where this all lives</p>
 
                 <div class="slide-content">
-                    <div class="fragment mt-extra-tight">
-                        <h4 class="highlight-blue">Event Store</h4>
-                        <p class="compact-text-zero">Append-only database that stores all events forever</p>
-                        <pre class="mt-extra-tight code-block--small"><code class="language-ruby" data-trim>
+                    <div class="fragment" style="margin-top: 0.2em;">
+                        <h4 class="highlight-blue small-text" style="margin-bottom: 0.15em;">Event Store (Event Log)</h4>
+                        <p class="small-text" style="margin: 0 0 0.25em 0;">Append-only database that stores all events in one table</p>
+                        <pre style="margin: 0.25em auto;" class="code-block--small"><code class="language-ruby" data-trim>
 EventStore.publish(event)  # Write
-EventStore.read_stream("cart-123")  # Read
+EventStore.read_stream("cart-123")  # Read by stream_id
                         </code></pre>
                     </div>
 
-                    <div class="fragment mt-extra-tight">
-                        <h4 class="highlight-green">Event Stream</h4>
-                        <p class="compact-text-zero">All events for one entity, ordered by time</p>
-                        <pre class="mt-extra-tight code-block--small"><code class="language-text" data-trim>
+                    <div class="fragment" style="margin-top: 0.6em;">
+                        <h4 class="highlight-green small-text" style="margin-bottom: 0.15em;">Event Stream</h4>
+                        <p class="small-text" style="margin: 0 0 0.25em 0;">Logical grouping: all events with the same <code>stream_id</code></p>
+                        <pre style="margin: 0.25em auto;" class="code-block--small"><code class="language-text" data-trim>
 Stream: "cart-123"
   ├─ Events::ItemAdded      (t=14:10)
   ├─ Events::ItemRemoved    (t=14:15)
@@ -1155,13 +1128,13 @@ Stream: "cart-123"
                         </code></pre>
                     </div>
 
-                    <p class="fragment key-message mt-extra-tight">
-                        One stream per entity. Query any stream at any time.
+                    <p class="fragment supporting-text" style="margin: 0.4em auto 0 auto;">
+                        One stream per aggregate. Query by <code>stream_id</code> to get all events for one entity.
                     </p>
                 </div>
 
                 <aside class="notes">
-                    [8:15-8:45] FOUNDATION: Explain Event Store and Streams before showing code that uses them. Event Store is append-only DB. Stream is logical grouping of events for one aggregate. This makes read_stream() make sense in later examples.
+                    [8:15-8:45] FOUNDATION: Event Store is a single events table. Stream is LOGICAL grouping queried by stream_id column (e.g., "cart-123"). This clarifies read_stream() is just a WHERE clause filtering by stream_id. Makes temporal queries make sense in later examples.
                 </aside>
             </section>
 
