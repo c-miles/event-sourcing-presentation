@@ -592,27 +592,27 @@
             <section>
                 <h2>The Dispute</h2>
                 <div class="slide-content">
-                    <p class="fragment key-message">
+                    <p class="fragment key-message" data-fragment-index="0">
                         A customer disputes an <strong>$80</strong> charge for wireless headphones.
                     </p>
-                    <p class="fragment" style="margin-top: 0.4em;">
+                    <p class="fragment" style="margin-top: 0.4em;" data-fragment-index="0">
                         <strong>Customer:</strong> "I removed those headphones before checkout!"
                     </p>
-                    <p class="fragment" style="margin-top: 0.4em;">
+                    <p class="fragment" style="margin-top: 0.4em;" data-fragment-index="1">
                         <strong>Support:</strong> "Our records show they were in your completed order."
                     </p>
-                    <p class="fragment" style="margin-top: 0.4em;">Customer support checks the database:</p>
-                    <pre class="fragment code-block--small" style="margin-top: 0.4em;"><code class="language-sql" data-trim>
+                    <p class="fragment" style="margin-top: 0.4em;" data-fragment-index="2">Customer support checks the database:</p>
+                    <pre class="fragment code-block--small" style="margin-top: 0.4em;" data-fragment-index="2"><code class="language-sql" data-trim>
 SELECT * FROM orders WHERE customer_id = 'cust_123' AND date = '2025-11-19';
 
 | order_id | status    | total   | items                    | updated_at          |
 |----------|-----------|---------|--------------------------|---------------------|
 | ord_456  | completed | $115.00 | laptop_case, headphones  | 2025-11-19 14:23:00 |
                     </code></pre>
-                    <p class="fragment highlight-orange key-message" style="margin-top: 0.4em;">
-                        Database shows: $115 total with headphones. Customer says: "I only wanted the $35 laptop case!"
+                    <p class="fragment highlight-orange key-message" style="margin-top: 0.4em; font-size: 0.75em;" data-fragment-index="3">
+                        Database: $115 with headphones. Customer: "I only wanted the $35 case!"
                     </p>
-                    <p class="fragment highlight-red key-message" style="margin-top: 0.4em;">
+                    <p class="fragment highlight-red key-message" style="margin-top: 0.4em; font-size: 0.75em;" data-fragment-index="3">
                         Who's telling the truth? You can't know. The history is gone.
                     </p>
                 </div>
@@ -625,28 +625,28 @@ SELECT * FROM orders WHERE customer_id = 'cust_123' AND date = '2025-11-19';
             <section>
                 <h2>Hi, I'm Chris Miles</h2>
                 <div class="slide-content">
-                    <p class="fragment key-message">
+                    <p class="fragment key-message" data-fragment-index="0">
                         <strong>Previously:</strong> 3.5 years at <span style="color: var(--color-orange);">Orange Barrel Media</span>
                     </p>
-                    <p class="fragment supporting-text mt-tight" style="padding-left: 1.5em;">
+                    <p class="fragment supporting-text mt-tight" style="padding-left: 1.5em;" data-fragment-index="0">
                         Working on Rails apps right across the street from here
                     </p>
-                    <p class="fragment key-message mt-normal">
+                    <p class="fragment key-message mt-normal" data-fragment-index="1">
                         <strong>Three months ago:</strong> I joined <span style="color: var(--color-blue);">Kode Health</span>.
                     </p>
-                    <p class="fragment key-message mt-normal">
+                    <p class="fragment key-message mt-normal" data-fragment-index="1">
                         <strong>Day 1:</strong> "Everything here uses Event Sourcing."
                     </p>
-                    <p class="fragment highlight-cyan key-message mt-normal">
+                    <p class="fragment highlight-cyan key-message mt-normal" data-fragment-index="1">
                         I had no idea what that meant.
                     </p>
-                    <p class="fragment key-message mt-normal">
+                    <p class="fragment key-message mt-normal" data-fragment-index="2">
                         <strong>Today:</strong> I want to share what I've learned so far.
                     </p>
-                    <p class="fragment key-message mt-normal">
+                    <p class="fragment key-message mt-normal" data-fragment-index="2">
                         Not as an expert - but as someone still learning alongside you.
                     </p>
-                    <p class="fragment key-message mt-normal">
+                    <p class="fragment key-message mt-normal" data-fragment-index="2">
                         I've found that trying to teach something deepens my own understanding.
                     </p>
                 </div>
@@ -716,20 +716,20 @@ order.update!(status: 'shipped')
             <!-- Today's Roadmap -->
             <section>
                 <h2>Today's Roadmap</h2>
-                <p class="key-message">Researching Event Sourcing led me to a broader landscape:</p>
-                <p class="key-message mt-tight" style="color: var(--color-cyan);">
+                <p class="fragment key-message" data-fragment-index="0">Researching Event Sourcing led me to a broader landscape:</p>
+                <p class="fragment key-message mt-tight" style="color: var(--color-cyan);" data-fragment-index="0">
                     The "event-driven" world.
                 </p>
-                <p class="supporting-text mt-normal">
+                <p class="fragment supporting-text mt-normal" data-fragment-index="0">
                     I quickly learned this world has 4 commonly confused patterns:
                 </p>
                 <ol class="mt-tight">
-                    <li class="fragment"><strong class="highlight-blue">Event Notification</strong> <span class="small-text">(Simple pub/sub)</span></li>
-                    <li class="fragment"><strong class="highlight-cyan">Event-Carried State Transfer</strong> <span class="small-text">(Events contain full data)</span></li>
-                    <li class="fragment"><strong class="highlight-green">CQRS</strong> <span class="small-text">(Separate read/write models)</span></li>
-                    <li class="fragment"><strong class="highlight-orange">Event Sourcing</strong> <span class="small-text">(Events as source of truth)</span></li>
+                    <li class="fragment" data-fragment-index="1"><strong class="highlight-blue">Event Notification</strong> <span class="small-text">(Simple pub/sub)</span></li>
+                    <li class="fragment" data-fragment-index="1"><strong class="highlight-cyan">Event-Carried State Transfer</strong> <span class="small-text">(Events contain full data)</span></li>
+                    <li class="fragment" data-fragment-index="1"><strong class="highlight-green">CQRS</strong> <span class="small-text">(Separate read/write models)</span></li>
+                    <li class="fragment" data-fragment-index="1"><strong class="highlight-orange">Event Sourcing</strong> <span class="small-text">(Events as source of truth)</span></li>
                 </ol>
-                <p class="fragment key-message mt-normal">
+                <p class="fragment key-message mt-normal" data-fragment-index="2">
                     <strong>Our journey:</strong> Quickly distinguish these 4 patterns, then deep-dive Event Sourcing.
                 </p>
                 <aside class="notes">
@@ -743,29 +743,29 @@ order.update!(status: 'shipped')
             <section>
                 <h2>Pattern #1: Event Notification</h2>
                 <div class="pattern">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         Simple pub/sub: <span class="highlight-blue">"Something happened, you might care"</span>
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="pattern__detail fragment" data-fragment-index="0">
                         Source system sends notification, doesn't expect response
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.3em;">
-                        <div class="pattern__benefits">
+                    <div class="two-column" style="margin-top: 0.3em;">
+                        <div class="pattern__benefits fragment" data-fragment-index="1">
                             <h4>Benefits</h4>
                             <ul class="pattern__list">
                                 <li>Low coupling between systems</li>
                                 <li>Simple to implement</li>
                             </ul>
                         </div>
-                        <div class="pattern__pitfalls">
+                        <div class="pattern__pitfalls fragment" data-fragment-index="2">
                             <h4>Pitfalls</h4>
                             <ul class="pattern__list">
-                                <li>Logic flow becomes implicit and hard to trace</li>
-                                <li>Difficult debugging when processes span multiple events</li>
+                                <li>Logic flow becomes hard to trace</li>
+                                <li>Hard to debug across events</li>
                             </ul>
                         </div>
                     </div>
-                    <p class="pattern__examples fragment">
+                    <p class="pattern__examples fragment" data-fragment-index="3">
                         <strong>e.g.</strong> Stripe webhooks ("payment_succeeded"), Order placed → email + inventory + analytics
                     </p>
                 </div>
@@ -777,8 +777,8 @@ order.update!(status: 'shipped')
             <!-- Event Notification - Example -->
             <section>
                 <h2>Event Notification Example</h2>
-                <p>Order placed → multiple systems react independently</p>
-                <pre class="mt-tight code-block--large"><code class="language-ruby" data-trim data-line-numbers>
+                <p class="fragment" data-fragment-index="0">Order placed → multiple systems react independently</p>
+                <pre class="fragment mt-tight code-block--large" data-fragment-index="0"><code class="language-ruby" data-trim data-line-numbers>
 # Publisher sends notification
 class OrderCreatedReactor
   def call(event)
@@ -792,7 +792,7 @@ end
 # Each subscriber handles the event independently
 # No coordination, no return values expected
                 </code></pre>
-                <p class="fragment key-message mt-tight">
+                <p class="fragment key-message mt-tight" data-fragment-index="1">
                     Perfect for <strong>loosely-coupled side effects</strong>
                 </p>
                 <aside class="notes">
@@ -804,22 +804,22 @@ end
             <section>
                 <h2>Pattern #2: Event-Carried State Transfer</h2>
                 <div class="pattern">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         <span class="highlight-cyan">"Thicc events"</span> containing complete state data
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="pattern__detail fragment" data-fragment-index="0">
                         Consumers maintain local copies, no back-queries needed
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.3em;">
-                        <div class="pattern__benefits">
+                    <div class="two-column" style="margin-top: 0.3em;">
+                        <div class="pattern__benefits fragment" data-fragment-index="1">
                             <h4>Benefits</h4>
                             <ul class="pattern__list">
-                                <li>Services remain operational when source is down</li>
+                                <li>Services stay up when source is down</li>
                                 <li>Fast local reads, no network latency</li>
                                 <li>Source system not hammered with queries</li>
                             </ul>
                         </div>
-                        <div class="pattern__tradeoffs">
+                        <div class="pattern__tradeoffs fragment" data-fragment-index="2">
                             <h4>Trade-offs</h4>
                             <ul class="pattern__list">
                                 <li>Duplicate data across services</li>
@@ -827,7 +827,7 @@ end
                             </ul>
                         </div>
                     </div>
-                    <p class="pattern__examples fragment">
+                    <p class="pattern__examples fragment" data-fragment-index="3">
                         <strong>e.g.</strong> Customer address change → event contains full customer profile → Billing, Shipping, Marketing all maintain local copies
                     </p>
                 </div>
@@ -839,8 +839,8 @@ end
             <!-- Event-Carried State Transfer - Example -->
             <section>
                 <h2>Event-Carried State Transfer Example</h2>
-                <p>Customer Service broadcasts full state to multiple services</p>
-                <pre class="mt-tight code-block"><code class="language-ruby" data-trim data-line-numbers>
+                <p class="fragment" data-fragment-index="0">Customer Service broadcasts full state to multiple services</p>
+                <pre class="fragment mt-tight code-block" data-fragment-index="0"><code class="language-ruby" data-trim data-line-numbers>
 # Event contains complete customer state
 Events::CustomerUpdated.new(
   customer_id: 123,
@@ -865,7 +865,7 @@ end
 
 # Marketing, Analytics, etc. - all have local copies
                 </code></pre>
-                <p class="fragment key-message mt-tight">
+                <p class="fragment key-message mt-tight" data-fragment-index="1">
                     No queries back to the source — everything needed is in the event
                 </p>
                 <aside class="notes">
@@ -878,10 +878,10 @@ end
                 <h2>Pattern #3: CQRS</h2>
                 <p class="supporting-text">(Command Query Responsibility Segregation)</p>
                 <div class="pattern">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         Separate <strong>data structures</strong> for reads vs writes
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.3em; font-size: 0.85em;">
+                    <div class="two-column fragment" style="margin-top: 0.3em; font-size: 0.85em;" data-fragment-index="0">
                         <div>
                             <h4 class="highlight-blue" style="font-size: 0.9em; margin-bottom: 0.2em;">Write Model</h4>
                             <ul class="pattern__list">
@@ -899,15 +899,15 @@ end
                             </ul>
                         </div>
                     </div>
-                    <div class="two-column fragment" style="margin-top: 0.3em;">
-                        <div class="pattern__benefits">
+                    <div class="two-column" style="margin-top: 0.3em;">
+                        <div class="pattern__benefits fragment" data-fragment-index="1">
                             <h4>Benefits</h4>
                             <ul class="pattern__list">
                                 <li>Optimize reads/writes independently</li>
                                 <li>Scale read-heavy workloads</li>
                             </ul>
                         </div>
-                        <div class="pattern__tradeoffs">
+                        <div class="pattern__tradeoffs fragment" data-fragment-index="2">
                             <h4>Trade-offs</h4>
                             <ul class="pattern__list">
                                 <li>Eventual consistency between models</li>
@@ -915,7 +915,7 @@ end
                             </ul>
                         </div>
                     </div>
-                    <p class="pattern__examples fragment">
+                    <p class="pattern__examples fragment" data-fragment-index="3">
                         <strong>e.g.</strong> Product catalog: millions browsing products, handful updating inventory
                     </p>
                 </div>
@@ -927,8 +927,8 @@ end
             <!-- CQRS - Example -->
             <section>
                 <h2>CQRS Example</h2>
-                <p>Product catalog: browsed constantly, updated rarely</p>
-                <pre class="mt-tight code-block"><code class="language-ruby" data-trim data-line-numbers>
+                <p class="fragment" data-fragment-index="0">Product catalog: browsed constantly, updated rarely</p>
+                <pre class="fragment mt-tight code-block" data-fragment-index="0"><code class="language-ruby" data-trim data-line-numbers>
 # Write Model - Normalized 'products' table
 class Product < ApplicationRecord
   validates :name, :price, presence: true
@@ -949,7 +949,7 @@ end
 # ProductCatalogReadModel.in_stock.by_category("electronics").top_rated
 # => [{ name: "Laptop", price: 999.99, stock_level: 15, avg_rating: 4.5 }, ...]
                 </code></pre>
-                <p class="fragment key-message mt-tight">
+                <p class="fragment key-message mt-tight" data-fragment-index="1">
                     Denormalized read model means no joins, no calculations — just fast queries
                 </p>
                 <aside class="notes">
@@ -961,30 +961,31 @@ end
             <section>
                 <h2>Pattern #4: Event Sourcing</h2>
                 <div class="pattern">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         Store <strong>all changes</strong> as immutable events
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="pattern__detail fragment" data-fragment-index="0">
                         Current state computed by replaying event history
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.3em;">
-                        <div class="pattern__benefits">
+                    <div class="two-column" style="margin-top: 0.3em;">
+                        <div class="pattern__benefits fragment" data-fragment-index="1">
                             <h4>Benefits</h4>
                             <ul class="pattern__list">
                                 <li>Complete audit trail of every change</li>
-                                <li>Time travel: query state at any point in history</li>
+                                <li>Time travel: query any point in history</li>
                                 <li>Rebuild state by replaying events</li>
                             </ul>
                         </div>
-                        <div class="pattern__tradeoffs">
+                        <div class="pattern__tradeoffs fragment" data-fragment-index="2">
                             <h4>Trade-offs</h4>
                             <ul class="pattern__list">
                                 <li>External system integration complexity</li>
+                                <li>Code evolution gets messy</li>
                                 <li>Storage overhead for event logs</li>
                             </ul>
                         </div>
                     </div>
-                    <p class="pattern__examples fragment">
+                    <p class="pattern__examples fragment" data-fragment-index="3">
                         <strong>e.g.</strong> Shopping cart: ItemAdded, ItemRemoved, CheckoutCompleted → complete history of every action
                     </p>
                 </div>
@@ -999,27 +1000,27 @@ end
             <section>
                 <h2>You Already Know This Pattern</h2>
                 <div class="slide-content" style="margin-top: 0.5em; font-size: 0.9em;">
-                    <h4 class="fragment" style="margin-bottom: 0.3em;">Your Bank Account</h4>
-                    <pre class="fragment code-block--full-width" style="margin-top: 0.3em; font-size: 0.45em;"><code class="language-text" data-trim>
+                    <h4 class="fragment" style="margin-bottom: 0.3em;" data-fragment-index="0">Your Bank Account</h4>
+                    <pre class="fragment code-block--full-width" style="margin-top: 0.3em; font-size: 0.45em;" data-fragment-index="0"><code class="language-text" data-trim>
 Date         Transaction            Amount      Balance
 --------------------------------------------------------
 2025-11-01   Deposit               +$1,000     $1,000
 2025-11-05   ATM Withdrawal        -$200       $800
 2025-11-10   Transfer Out          -$300       $500
                     </code></pre>
-                    <p class="fragment" style="margin-top: 0.5em;">
+                    <p class="fragment" style="margin-top: 0.5em;" data-fragment-index="1">
                         Your bank doesn't just store <code>balance = $500</code>
                     </p>
-                    <p class="fragment key-message" style="margin-top: 0.3em;">
+                    <p class="fragment key-message" style="margin-top: 0.3em;" data-fragment-index="1">
                         It stores every transaction, then computes the balance.
                     </p>
-                    <p class="fragment key-message" style="margin-top: 0.5em;">
+                    <p class="fragment key-message" style="margin-top: 0.5em;" data-fragment-index="1">
                         <strong>That's Event Sourcing.</strong>
                     </p>
-                    <p class="fragment" style="margin-top: 0.3em;">
+                    <p class="fragment" style="margin-top: 0.3em;" data-fragment-index="2">
                         Since 1494 (Luca Pacioli's <em>Summa de Arithmetica</em>), accountants have used <strong>double-entry bookkeeping</strong>: never erase ledger entries, only add corrections.
                     </p>
-                    <p class="fragment key-message" style="margin-top: 0.3em; color: #85ab78;">
+                    <p class="fragment key-message" style="margin-top: 0.3em; color: #85ab78;" data-fragment-index="2">
                         This pattern has been battle-tested for <strong>500+ years</strong> in banking.
                     </p>
                 </div>
@@ -1033,12 +1034,12 @@ Date         Transaction            Amount      Balance
             <!-- Event Sourcing Definition -->
             <section>
                 <h2>The Formal Definition</h2>
-                <p class="key-message">You understand the concept. Here's the technical definition:</p>
-                <blockquote class="mt-normal">
+                <p class="fragment key-message" data-fragment-index="0">You understand the concept. Here's the technical definition:</p>
+                <blockquote class="fragment mt-normal" data-fragment-index="0">
                     "Capture all changes to application state as a sequence of events. These event objects are stored in the same sequence they were applied, for the same lifetime as the application state itself."
                     <footer class="mt-normal">— Martin Fowler</footer>
                 </blockquote>
-                <div class="fragment mt-loose">
+                <div class="fragment mt-loose" data-fragment-index="1">
                     <p class="key-message">Translation:</p>
                     <p class="mt-tight">Every change = one immutable event</p>
                     <p class="mt-tight">Events = append-only log</p>
@@ -1091,33 +1092,33 @@ Date         Transaction            Amount      Balance
             <!-- The Flow -->
             <section>
                 <h2>The Event Sourcing Flow</h2>
-                <div class="flow-diagram" style="margin-top: 1.5em; font-size: 0.65em;">
-                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
+                <div class="flow-diagram fragment" style="margin-top: 1.5em; font-size: 0.65em;" data-fragment-index="0">
+                    <div class="flow-step" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Command</strong>
                         <span class="small-text">Intent</span>
                     </div>
-                    <div class="flow-arrow fragment">→</div>
-                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Handler</strong>
                         <span class="small-text">Load</span>
                     </div>
-                    <div class="flow-arrow fragment">→</div>
-                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Aggregate</strong>
                         <span class="small-text">Validate</span>
                     </div>
-                    <div class="flow-arrow fragment">→</div>
-                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Event</strong>
                         <span class="small-text">Store</span>
                     </div>
-                    <div class="flow-arrow fragment">→</div>
-                    <div class="flow-step fragment" style="padding: 0.6em 0.8em; min-width: 85px;">
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="padding: 0.6em 0.8em; min-width: 85px;">
                         <strong>Reaction</strong>
                         <span class="small-text">Update</span>
                     </div>
                 </div>
-                <div class="fragment" style="margin-top: 1.5em; font-size: 0.85em; text-align: left; max-width: 90%;">
+                <div class="fragment" style="margin-top: 1.5em; font-size: 0.85em; text-align: left; max-width: 90%;" data-fragment-index="1">
                     <p class="key-message" style="margin-bottom: 0.5em;"><strong>How it works:</strong></p>
                     <p style="margin: 0.3em 0;">1. User clicks "Add to Cart" → creates <code>AddItemToCart</code> command</p>
                     <p style="margin: 0.3em 0;">2. Handler receives command, loads <code>ShoppingCart</code> by <strong>replaying past events</strong></p>
@@ -1133,10 +1134,10 @@ Date         Transaction            Amount      Balance
             <!-- Event Store & Streams - Foundation -->
             <section>
                 <h2>The Event Store & Streams</h2>
-                <p class="supporting-text" style="margin: 0.2em auto;">Now that you understand the flow, let's see where this all lives</p>
+                <p class="fragment supporting-text" style="margin: 0.2em auto;" data-fragment-index="0">Now that you understand the flow, let's see where this all lives</p>
 
                 <div class="slide-content">
-                    <div class="fragment" style="margin-top: 0.2em;">
+                    <div class="fragment" style="margin-top: 0.2em;" data-fragment-index="0">
                         <h4 class="highlight-blue small-text" style="margin-bottom: 0.15em;">Event Store (Event Log)</h4>
                         <p class="small-text" style="margin: 0 0 0.25em 0;">Append-only database that stores all events in one table</p>
                         <pre style="margin: 0.25em auto;" class="code-block--small"><code class="language-ruby" data-trim>
@@ -1145,7 +1146,7 @@ EventStore.read_stream("cart-123")  # Read by stream_id
                         </code></pre>
                     </div>
 
-                    <div class="fragment" style="margin-top: 0.6em;">
+                    <div class="fragment" style="margin-top: 0.6em;" data-fragment-index="1">
                         <h4 class="highlight-green small-text" style="margin-bottom: 0.15em;">Event Stream</h4>
                         <p class="small-text" style="margin: 0 0 0.25em 0;">Logical grouping: all events with the same <code>stream_id</code></p>
                         <pre style="margin: 0.25em auto;" class="code-block--small"><code class="language-text" data-trim>
@@ -1156,7 +1157,7 @@ Stream: "cart-123"
                         </code></pre>
                     </div>
 
-                    <p class="fragment supporting-text" style="margin: 0.4em auto 0 auto;">
+                    <p class="fragment supporting-text" style="margin: 0.4em auto 0 auto;" data-fragment-index="2">
                         One stream per aggregate. Query by <code>stream_id</code> to get all events for one entity.
                     </p>
                 </div>
@@ -1171,12 +1172,12 @@ Stream: "cart-123"
             <!-- The Superpowers: Intro -->
             <section>
                 <h2>Event Sourcing Superpowers</h2>
-                <p class="supporting-text" style="margin-top: 0.5em;">We've learned WHAT Event Sourcing is. Now let's see WHY it matters.</p>
+                <p class="fragment supporting-text" style="margin-top: 0.5em;" data-fragment-index="0">We've learned WHAT Event Sourcing is. Now let's see WHY it matters.</p>
 
-                <p class="fragment key-message highlight-orange" style="margin-top: 1.5em;">
+                <p class="fragment key-message highlight-orange" style="margin-top: 1.5em;" data-fragment-index="1">
                     Remember that shopping cart dispute?
                 </p>
-                <p class="fragment key-message" style="margin-top: 0.8em;">
+                <p class="fragment key-message" style="margin-top: 0.8em;" data-fragment-index="1">
                     Event Sourcing solves it—and unlocks three more superpowers.
                 </p>
                 <aside class="notes">
@@ -1188,14 +1189,14 @@ Stream: "cart-123"
             <section>
                 <h2>Superpower #1: Time Travel Queries</h2>
                 <div class="pattern pattern--superpower">
-                    <p class="pattern__description fragment">
+                    <p class="fragment pattern__description" data-fragment-index="0">
                         Determine application state <span class="highlight-orange">at any point in history</span>
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="fragment pattern__detail" data-fragment-index="0">
                         Replay events from the beginning up to a specific timestamp
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.2em;">
-                        <div class="pattern__benefits">
+                    <div class="two-column" style="margin-top: 0.2em;">
+                        <div class="fragment pattern__benefits" data-fragment-index="1">
                             <h4>Use Cases</h4>
                             <ul class="pattern__list">
                                 <li>Resolve customer disputes with evidence</li>
@@ -1203,7 +1204,7 @@ Stream: "cart-123"
                                 <li>Compliance (GDPR): prove what data existed when</li>
                             </ul>
                         </div>
-                        <div class="pattern__tradeoffs">
+                        <div class="fragment pattern__tradeoffs" data-fragment-index="2">
                             <h4>Examples</h4>
                             <ul class="pattern__list">
                                 <li>Shopping cart: "What was in cart at 2:16 PM?"</li>
@@ -1212,10 +1213,10 @@ Stream: "cart-123"
                             </ul>
                         </div>
                     </div>
-                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;">
+                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;" data-fragment-index="3">
                         <strong>Remember our opening:</strong> Customer claims headphones were removed.
                     </p>
-                    <pre class="fragment code-block" style="margin-top: 0.2em; font-size: 0.42em;"><code class="language-ruby" data-trim>
+                    <pre class="fragment code-block" style="margin-top: 0.2em; font-size: 0.42em;" data-fragment-index="3"><code class="language-ruby" data-trim>
 # Query state at ANY point in time
 cart.as_of(Time.parse("2025-11-19 14:16:00"))
 # => { items: ["laptop_case"] }  # Headphones WERE removed!
@@ -1223,7 +1224,7 @@ cart.as_of(Time.parse("2025-11-19 14:16:00"))
 cart.as_of(Time.parse("2025-11-19 14:21:00"))
 # => { items: ["laptop_case", "headphones"] }  # Then added back!
                     </code></pre>
-                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.2em; color: #85ab78;">
+                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.2em; color: #85ab78;" data-fragment-index="3">
                         Dispute resolved! Customer removed them at 2:16 PM, then accidentally re-added at 2:21 PM.
                     </p>
                 </div>
@@ -1235,37 +1236,32 @@ cart.as_of(Time.parse("2025-11-19 14:21:00"))
             <!-- Superpower #1: Implementation -->
             <section>
                 <h2>Time Travel Queries: How It Works</h2>
-                <p class="supporting-text" style="margin-top: 0.3em;">The mechanism behind resolving that dispute</p>
-                <pre class="mt-tight code-block" style="font-size: 0.5em;"><code class="language-ruby" data-trim data-line-numbers>
+                <p class="fragment supporting-text" style="margin-top: 0.3em;" data-fragment-index="0">The mechanism behind resolving that dispute</p>
+                <pre class="fragment mt-tight code-block" style="font-size: 0.5em;" data-fragment-index="0"><code class="language-ruby" data-trim data-line-numbers>
 class CartRepository
-  def as_of(timestamp, cart_id)
-    # 1. Read ALL events for this cart
+  def as_of(cart_id, timestamp)
+    # 1. Read events for this cart up to timestamp
     events = EventStore
       .read_stream("cart-#{cart_id}")
       .select { |event| event.created_at <= timestamp }
 
-    # 2. Replay filtered events to rebuild state
-    replay_events(events)
-  end
-
-  private
-
-  def replay_events(events)
-    cart = Cart.new
+    # 2. Rebuild aggregate by replaying events
+    cart = Cart.new(cart_id)
     events.each { |event| cart.apply(event) }
     cart
   end
 end
 
 # Usage: Query state at 2:16 PM
-cart = CartRepository.as_of(Time.parse("2025-11-19 14:16:00"), 123)
+repository = CartRepository.new
+cart = repository.as_of(123, Time.parse("2025-11-19 14:16:00"))
 cart.items # => ["laptop_case"] - Headphones were removed!
                 </code></pre>
-                <p class="fragment key-message mt-tight">
-                    Filter events by timestamp, replay them → recreate any moment in history
+                <p class="fragment key-message mt-tight" data-fragment-index="1">
+                    Repository loads events, replays them → recreate any moment in history
                 </p>
                 <aside class="notes">
-                    [10:15-10:45] Show HOW temporal queries work: filter events before timestamp, replay to rebuild state. This is the technical mechanism behind the dispute resolution. Developers understand it's not magic - it's elegant engineering.
+                    [10:15-10:45] Show HOW temporal queries work: Repository pattern separates aggregate from event store. Filter events before timestamp, replay to rebuild state. This is the technical mechanism behind the dispute resolution. Developers understand it's not magic - it's elegant engineering.
                 </aside>
             </section>
 
@@ -1273,13 +1269,13 @@ cart.items # => ["laptop_case"] - Headphones were removed!
             <section>
                 <h2>Superpower #2: Perfect Audit Trail</h2>
                 <div class="pattern pattern--superpower">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         Every change recorded forever: <span class="highlight-orange">what, who, when, why</span>
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="pattern__detail fragment" data-fragment-index="0">
                         Immutable, tamper-proof history — built into the architecture, not bolted on
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                    <div class="two-column fragment" style="margin-top: 0.2em;" data-fragment-index="1">
                         <div class="pattern__benefits">
                             <h4 style="color: var(--color-cyan);">Traditional Audit (PaperTrail/Audited)</h4>
                             <ul class="pattern__list">
@@ -1299,7 +1295,7 @@ cart.items # => ["laptop_case"] - Headphones were removed!
                             </ul>
                         </div>
                     </div>
-                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.3em; color: #85ab78;">
+                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.3em; color: #85ab78;" data-fragment-index="2">
                         HIPAA compliance? ✓ SOC 2 audit? ✓ Forensic investigation? ✓
                     </p>
                 </div>
@@ -1311,8 +1307,8 @@ cart.items # => ["laptop_case"] - Headphones were removed!
             <!-- Superpower #2: Implementation -->
             <section>
                 <h2>Perfect Audit Trail: How It Works</h2>
-                <p class="supporting-text" style="margin-top: 0.3em;">Complete history of WHO changed WHAT and WHY</p>
-                <pre class="mt-tight code-block" style="font-size: 0.38em;"><code class="language-ruby" data-trim>
+                <p class="fragment supporting-text" style="margin-top: 0.3em;" data-fragment-index="0">Complete history of WHO changed WHAT and WHY</p>
+                <pre class="fragment mt-tight code-block" style="font-size: 0.38em;" data-fragment-index="0"><code class="language-ruby" data-trim>
 # Event stream shows complete audit trail
 events = EventStore.read_stream("patient-789")
 
@@ -1334,7 +1330,7 @@ Events::MedicationPrescribed
   medication: "Azithromycin 250mg Z-pack"
   reason: "Alternative antibiotic after penicillin allergy confirmed"
                 </code></pre>
-                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;" data-fragment-index="1">
                     Malpractice lawsuit? Complete, immutable record of when allergy was discovered and documented.
                 </p>
                 <aside class="notes">
@@ -1346,13 +1342,13 @@ Events::MedicationPrescribed
             <section>
                 <h2>Superpower #3: Debug by Replay</h2>
                 <div class="pattern pattern--superpower">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         Reproduce production bugs <span class="highlight-orange">deterministically</span> in development
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="pattern__detail fragment" data-fragment-index="0">
                         Export exact event sequence from production, replay locally with debugger
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                    <div class="two-column fragment" style="margin-top: 0.2em;" data-fragment-index="1">
                         <div class="pattern__benefits">
                             <h4 style="color: var(--color-cyan);">Traditional Debugging</h4>
                             <ul class="pattern__list">
@@ -1372,7 +1368,7 @@ Events::MedicationPrescribed
                             </ul>
                         </div>
                     </div>
-                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;">
+                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;" data-fragment-index="2">
                         <strong>Scenario:</strong> Customer charged twice, but checkout shows "failed"
                     </p>
                 </div>
@@ -1384,8 +1380,8 @@ Events::MedicationPrescribed
             <!-- Superpower #3: Implementation -->
             <section>
                 <h2>Debug by Replay: How It Works</h2>
-                <p class="supporting-text" style="margin-top: 0.3em;">Export production events, replay locally, fix with confidence</p>
-                <pre class="mt-tight code-block" style="font-size: 0.55em;"><code class="language-ruby" data-trim data-line-numbers>
+                <p class="fragment supporting-text" style="margin-top: 0.3em;" data-fragment-index="0">Export production events, replay locally, fix with confidence</p>
+                <pre class="fragment mt-tight code-block" style="font-size: 0.55em;" data-fragment-index="0"><code class="language-ruby" data-trim data-line-numbers>
 # 1. Export events from production order that failed
 production_events = EventStore.read_stream("order-12345")
 # => [ItemAdded, ItemAdded, CheckoutStarted, PaymentProcessed,
@@ -1404,7 +1400,7 @@ end
 
 # 4. Deploy fix with confidence - bug can't resurface
                 </code></pre>
-                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;" data-fragment-index="1">
                     From "can't reproduce" to "found and fixed in 20 minutes"
                 </p>
                 <aside class="notes">
@@ -1416,13 +1412,13 @@ end
             <section>
                 <h2>Superpower #4: Event-Driven Architecture</h2>
                 <div class="pattern pattern--superpower">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         Build <span class="highlight-cyan">loosely-coupled, independently scalable</span> systems
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="pattern__detail fragment" data-fragment-index="0">
                         Services react to events asynchronously — no direct calls, no cascading failures
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                    <div class="two-column fragment" style="margin-top: 0.2em;" data-fragment-index="1">
                         <div class="pattern__benefits">
                             <h4 style="color: var(--color-cyan);">Traditional (Synchronous)</h4>
                             <ul class="pattern__list">
@@ -1442,7 +1438,7 @@ end
                             </ul>
                         </div>
                     </div>
-                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;">
+                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;" data-fragment-index="2">
                         <strong>Scenario:</strong> Business wants fraud detection on all orders
                     </p>
                 </div>
@@ -1454,8 +1450,8 @@ end
             <!-- Superpower #4: Implementation -->
             <section>
                 <h2>Event-Driven Architecture: How It Works</h2>
-                <p class="supporting-text" style="margin-top: 0.3em;">One event, multiple independent reactions — add features without modifying existing code</p>
-                <pre class="mt-tight code-block" style="font-size: 0.5em;"><code class="language-ruby" data-trim>
+                <p class="fragment supporting-text" style="margin-top: 0.3em;" data-fragment-index="0">One event, multiple independent reactions — add features without modifying existing code</p>
+                <pre class="fragment mt-tight code-block" style="font-size: 0.5em;" data-fragment-index="0"><code class="language-ruby" data-trim>
 # One event published
 Events::OrderPlaced.new(order_id: 123, total: 115)
 
@@ -1468,7 +1464,7 @@ ShippingService.on(OrderPlaced)  { |e| create_label(e.order_id) }
 # Want fraud detection? Just add a subscriber - no changes to OrderService!
 FraudService.on(OrderPlaced)     { |e| check_for_fraud(e.order_id) }
                 </code></pre>
-                <p class="fragment key-message mt-tight" style="font-size: 0.62em;">
+                <p class="fragment key-message mt-tight" style="font-size: 0.62em;" data-fragment-index="1">
                     Deploy FraudService independently. If EmailService is down, others keep working. This is how modern systems scale.
                 </p>
                 <aside class="notes">
@@ -1480,13 +1476,13 @@ FraudService.on(OrderPlaced)     { |e| check_for_fraud(e.order_id) }
             <section>
                 <h2>Challenge #1: External Systems</h2>
                 <div class="pattern pattern--superpower">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         <span class="highlight-orange">Fowler's biggest warning:</span> You can't "undo" external actions
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="pattern__detail fragment" data-fragment-index="0">
                         Event replay assumes pure functions — external side effects break that assumption
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                    <div class="two-column fragment" style="margin-top: 0.2em;" data-fragment-index="1">
                         <div class="pattern__benefits">
                             <h4 style="color: var(--color-cyan);">The Problem</h4>
                             <ul class="pattern__list">
@@ -1504,7 +1500,7 @@ FraudService.on(OrderPlaced)     { |e| check_for_fraud(e.order_id) }
                             </ul>
                         </div>
                     </div>
-                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.3em; color: #85ab78;">
+                    <p class="fragment key-message" style="font-size: 0.65em; margin-top: 0.3em; color: #85ab78;" data-fragment-index="2">
                         This is why ES requires <strong>careful integration design</strong>
                     </p>
                 </div>
@@ -1516,8 +1512,8 @@ FraudService.on(OrderPlaced)     { |e| check_for_fraud(e.order_id) }
             <!-- Gateway Pattern for External Systems -->
             <section>
                 <h2>Gateway Pattern: Idempotent Actions</h2>
-                <p class="supporting-text" style="margin-top: 0.3em;">Track what was sent, don't resend on replay</p>
-                <pre class="mt-tight code-block" style="font-size: 0.48em;"><code class="language-ruby" data-trim data-line-numbers>
+                <p class="fragment supporting-text" style="margin-top: 0.3em;" data-fragment-index="0">Track what was sent, don't resend on replay</p>
+                <pre class="fragment mt-tight code-block" style="font-size: 0.6em;" data-fragment-index="0"><code class="language-ruby" data-trim data-line-numbers>
 class EmailGateway
   def send_order_confirmation(event)
     # Check if already sent - idempotency guard
@@ -1537,7 +1533,7 @@ end
 
 # On replay, emails won't be resent because guard returns early
                 </code></pre>
-                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;" data-fragment-index="1">
                     Event ID as idempotency key — essential for production ES systems
                 </p>
                 <aside class="notes">
@@ -1549,13 +1545,13 @@ end
             <section>
                 <h2>Challenge #2: Code Evolution / Schema Evolution</h2>
                 <div class="pattern pattern--superpower">
-                    <p class="pattern__description fragment">
+                    <p class="pattern__description fragment" data-fragment-index="0">
                         Events are <span class="highlight-orange">immutable history</span> — code must evolve while handling old formats
                     </p>
-                    <p class="pattern__detail fragment">
+                    <p class="pattern__detail fragment" data-fragment-index="0">
                         New business logic, bug fixes, and temporal rules require backward compatibility
                     </p>
-                    <div class="two-column fragment" style="margin-top: 0.2em;">
+                    <div class="two-column fragment" style="margin-top: 0.2em;" data-fragment-index="1">
                         <div class="pattern__benefits">
                             <h4 style="color: var(--color-cyan);">Traditional CRUD</h4>
                             <ul class="pattern__list">
@@ -1573,7 +1569,7 @@ end
                             </ul>
                         </div>
                     </div>
-                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;">
+                    <p class="fragment" style="font-size: 0.58em; margin-top: 0.25em; font-weight: 600; text-align: center;" data-fragment-index="2">
                         <strong>Scenario:</strong> Bug in discount calculation from 6 months ago — fix code but can't change history
                     </p>
                 </div>
@@ -1585,8 +1581,8 @@ end
             <!-- Challenge #2: Schema Evolution Strategies -->
             <section>
                 <h2>Schema Evolution: How to Handle It</h2>
-                <p class="supporting-text" style="margin-top: 0.3em;">Three strategies for handling event format changes</p>
-                <pre class="mt-tight code-block" style="font-size: 0.36em;"><code class="language-ruby" data-trim>
+                <p class="fragment supporting-text" style="margin-top: 0.3em;" data-fragment-index="0">Three strategies for handling event format changes</p>
+                <pre class="fragment mt-tight code-block" style="font-size: 0.36em;" data-fragment-index="0"><code class="language-ruby" data-trim>
 # Strategy 1: Upcasting - transform old events to new format on read
 def upcast_order_placed(event_data)
   return event_data if event_data[:version] == 2
@@ -1607,7 +1603,7 @@ def apply_order_placed(event)
   @tax = event[:tax] || 0
 end
                 </code></pre>
-                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;" data-fragment-index="1">
                     Upcasting most common — transforms on read without mutating immutable history
                 </p>
                 <aside class="notes">
@@ -1618,7 +1614,7 @@ end
             <!-- When to Use -->
             <section>
                 <h2>When Should You Use Event Sourcing?</h2>
-                <div class="two-column mt-normal">
+                <div class="fragment two-column mt-normal" data-fragment-index="0">
                     <div>
                         <h4 class="highlight-green">Good Fit</h4>
                         <ul class="pattern__list">
@@ -1642,7 +1638,7 @@ end
                         </ul>
                     </div>
                 </div>
-                <p class="fragment highlight-blue mt-normal" style="font-style: italic; font-size: 0.75em;">
+                <p class="fragment highlight-blue mt-normal" style="font-style: italic; font-size: 0.75em;" data-fragment-index="1">
                     "Event Sourcing is not a natural choice — you need to expect some form of return" — Fowler
                 </p>
                 <aside class="notes">
@@ -1654,32 +1650,32 @@ end
             <section>
                 <h2>Who Uses Event Sourcing?</h2>
                 <div class="three-column mt-normal">
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="0">
                         <h4 style="color: #e5707d; font-weight: 600;">Netflix</h4>
                         <p>Downloads feature uses ES with Cassandra - billions of viewing events daily</p>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="0">
                         <h4 style="color: #9B7FBD; font-weight: 600;">Stripe</h4>
                         <p>Kafka-based general ledger - every transaction in immutable log</p>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="0">
                         <h4 style="color: #85ab78; font-weight: 600;">GitHub</h4>
                         <p>Git stores immutable commit history - every change is logged forever</p>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="0">
                         <h4 style="color: #4db8c4; font-weight: 600;">Your Bank</h4>
                         <p>Double-entry bookkeeping - 500+ years of proven reliability</p>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="0">
                         <h4 style="color: #5b9bd5; font-weight: 600;">Walmart</h4>
                         <p>Inventory system - billions of products tracked with event sourcing</p>
                     </div>
-                    <div class="fragment">
+                    <div class="fragment" data-fragment-index="0">
                         <h4 style="color: #5b9bd5; font-weight: 600;">LinkedIn</h4>
                         <p>Professional network updates - immutable activity stream</p>
                     </div>
                 </div>
-                <p class="fragment highlight-orange key-message mt-normal">
+                <p class="fragment highlight-orange key-message mt-normal" data-fragment-index="1">
                     You're already using Event Sourced systems every single day.
                 </p>
                 <aside class="notes">
@@ -1692,24 +1688,24 @@ end
             <!-- Rails Implementation Options -->
             <section>
                 <h2>Event Sourcing in Rails</h2>
-                <p>Several options for Rails developers:</p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 0.8em;">
-                    <div class="fragment">
+                <p class="fragment" data-fragment-index="0">Several options for Rails developers:</p>
+                <div class="fragment" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 0.8em;" data-fragment-index="0">
+                    <div>
                         <h4 style="color: #e5707d; font-weight: 600;">Rails Event Store</h4>
                         <p>Production-ready gem by Arkency</p>
                         <p class="small-text">PostgreSQL-based, great docs</p>
                     </div>
-                    <div class="fragment">
+                    <div>
                         <h4 style="color: #5b9bd5; font-weight: 600;">Sequent</h4>
                         <p>CQRS and Event Sourcing framework</p>
                         <p class="small-text">PostgreSQL, strong opinions</p>
                     </div>
-                    <div class="fragment">
+                    <div>
                         <h4 style="color: #f0a05c; font-weight: 600;">Kafka + Karafka</h4>
                         <p>Event streaming backbone</p>
                         <p class="small-text">Build ES on top of Kafka</p>
                     </div>
-                    <div class="fragment">
+                    <div>
                         <h4 style="color: #85ab78; font-weight: 600;">Roll Your Own</h4>
                         <p>PostgreSQL tables + patterns</p>
                         <p class="small-text">Full control, more work</p>
@@ -1723,8 +1719,8 @@ end
             <!-- Rails Event Store Example -->
             <section>
                 <h2>Getting Started with Rails Event Store</h2>
-                <p class="supporting-text" style="margin-top: 0.3em;">The most popular option - here's everything you need in three steps</p>
-                <pre class="code-block" style="font-size: 0.45em;"><code class="language-ruby" data-trim>
+                <p class="fragment supporting-text" style="margin-top: 0.3em;" data-fragment-index="0">The most popular option - here's everything you need in three steps</p>
+                <pre class="fragment code-block" style="font-size: 0.45em;" data-fragment-index="0"><code class="language-ruby" data-trim>
 # Step 1: Add the gem
 gem 'rails_event_store'
 
@@ -1742,7 +1738,7 @@ event_store.publish(ItemAddedToCart.new(data: {
   cart_id: cart.id, product_id: product.id, quantity: 2
 }), stream_name: "Cart-#{cart.id}")
                 </code></pre>
-                <p class="fragment key-message mt-tight" style="font-size: 0.7em;">
+                <p class="fragment key-message mt-tight" style="font-size: 0.7em;" data-fragment-index="1">
                     Install gem → Configure → Publish events. Production-ready in under 10 minutes.
                 </p>
                 <aside class="notes">
@@ -1753,8 +1749,8 @@ event_store.publish(ItemAddedToCart.new(data: {
             <!-- Testing -->
             <section>
                 <h2>One More Thing: Testing is Beautiful</h2>
-                <p class="supporting-text" style="margin-top: 0.3em;">A delightful side effect of Event Sourcing: testing becomes elegant</p>
-                <pre class="code-block" style="font-size: 0.38em;"><code class="language-ruby" data-trim>
+                <p class="fragment supporting-text" style="margin-top: 0.3em;" data-fragment-index="0">A delightful side effect of Event Sourcing: testing becomes elegant</p>
+                <pre class="fragment code-block" style="font-size: 0.38em;" data-fragment-index="0"><code class="language-ruby" data-trim>
 RSpec.describe AddItemToCart do
   it "publishes ItemAddedToCart event" do
     # Given: cart was created
@@ -1778,7 +1774,7 @@ RSpec.describe AddItemToCart do
   end
 end
                 </code></pre>
-                <p class="fragment key-message mt-tight" style="font-size: 0.6em;">
+                <p class="fragment key-message mt-tight" style="font-size: 0.6em;" data-fragment-index="1">
                     Setup with events, assert with events. Explicit and clean.
                 </p>
                 <aside class="notes">
